@@ -39,11 +39,17 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\DescriptionAttribute.cs" />
+    <Compile Include="Extensions\AttributeExtensions.cs" />
+    <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
+    <Compile Include="Model\AuthResponseType.cs" />
     <Compile Include="Model\BaseItem.cs" />
     <Compile Include="Model\Auth.cs" />
     <Compile Include="Model\Responses\AuthResponse.cs" />
     <Compile Include="Model\Responses\ErrorResponse.cs" />
+    <Compile Include="Model\Responses\UserResponse.cs" />
+    <Compile Include="Model\Scope.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\VidMeException.cs" />
     <Compile Include="VidMeClient.cs" />

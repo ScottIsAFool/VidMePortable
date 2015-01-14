@@ -14,5 +14,8 @@ namespace VidMePortable.Model
 
         [JsonProperty("avatar")]
         public string Avatar { get; set; }
+
+        [JsonProperty("avatar_url")]
+        public string AvatarUrl { get; set; }
     }
 }
