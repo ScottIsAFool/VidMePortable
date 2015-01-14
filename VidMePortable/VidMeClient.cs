@@ -146,6 +146,32 @@ namespace VidMePortable
             return response != null ? response.User : null;
         }
 
+        public async Task<AuthResponse> EditUserAsync(string userId, string username = null, string currentPassword = null, string newPassword = null, string email = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "User Id cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+
+            postData.AddIfNotNull("username", username);
+            postData.AddIfNotNull("email", email);
+            postData.AddIfNotNull("password", newPassword);
+            postData.AddIfNotNull("passwordCurrent", currentPassword);
+            postData.AddIfNotNull("bio", "");
+
+            postData.AddIfNotNull("email", email);
+
+            var response = await Post<AuthResponse>(postData, "user/edit", cancellationToken);
+            if (response != null)
+            {
+                SetAuthentication(response.Auth);
+            }
+
+            return response;
+        }
+
         #endregion
 
         #region API Call methods
