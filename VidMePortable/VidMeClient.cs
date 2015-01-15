@@ -256,6 +256,113 @@ namespace VidMePortable
 
         #endregion
 
+        #region Comment Methods
+
+        public async Task<Comment> CreateCommentAsync(string videoId, string commentText, TimeSpan timeOfComment, string inReplyToCommentId = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(videoId))
+            {
+                throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
+            }
+
+            if (string.IsNullOrEmpty(commentText))
+            {
+                throw new ArgumentNullException("commentText", "Empty comments are not allowed");
+            }
+
+            if (timeOfComment == TimeSpan.MinValue)
+            {
+                timeOfComment = TimeSpan.FromSeconds(0);
+            }
+
+            var postData = CreatePostData();
+            postData.AddIfNotNull("video", videoId);
+            postData.AddIfNotNull("comment", inReplyToCommentId);
+            postData.AddIfNotNull("body", commentText);
+            postData.AddIfNotNull("at", timeOfComment.TotalSeconds);
+
+            var response = await Post<CommentResponse>(postData, "comment/create", cancellationToken);
+
+            return response != null ? response.Comment : null;
+        }
+
+        public async Task<bool> DeleteCommentAsync(string commentId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(commentId))
+            {
+                throw new ArgumentNullException("commentId", "Comment ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+            var method = string.Format("comment/{0}/delete", commentId);
+
+            var response = await Post<Response>(postData, method, cancellationToken);
+            return response != null && response.Status;
+        }
+
+        public async Task<Comment> GetCommentAsync(string commentId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(commentId))
+            {
+                throw new ArgumentNullException("commentId", "Comment ID cannot be null or empty");
+            }
+
+            var method = string.Format("comment/{0}", commentId);
+            var response = await Get<CommentResponse>(method, cancellationToken: cancellationToken);
+
+            return response != null ? response.Comment : null;
+        }
+
+        public async Task<List<Comment>> GetCommentsAsync(string videoId, SortDirection? sortDirection, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(videoId))
+            {
+                throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
+            }
+
+            var options = new Dictionary<string, string>();
+            options.AddIfNotNull("video", videoId);
+            options.AddIfNotNull("direction", sortDirection.GetDescription());
+            
+            var response = await Get<CommentsResponse>("comments/list", options.ToQueryString(), cancellationToken);
+
+            if (response != null)
+            {
+                return response.Comments ?? new List<Comment>();
+            }
+
+            return new List<Comment>();
+        }
+
+        public string GetCommentUrl(string commentId)
+        {
+            if (string.IsNullOrEmpty(commentId))
+            {
+                throw new ArgumentNullException("commentId", "Comment ID cannot be null or empty");
+            }
+
+            return CreateUrl(string.Format("comment/{0}/url", commentId));
+        }
+
+        public async Task<Comment> VoteCommentAsync(string commentId, Vote vote, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(commentId))
+            {
+                throw new ArgumentNullException("commentId", "Comment ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+            postData.AddIfNotNull("value", vote.GetDescription());
+
+            var method = string.Format("comment/{0}/vote", commentId);
+
+            var response = await Post<CommentResponse>(postData, method, cancellationToken);
+
+            return response != null ? response.Comment : null;
+        }
+
+        #endregion
+
         #region User Methods
 
         public string GetUserAvatar(string userId)

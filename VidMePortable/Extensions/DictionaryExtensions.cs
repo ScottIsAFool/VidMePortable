@@ -14,6 +14,14 @@ namespace VidMePortable.Extensions
             }
         }
 
+        internal static void AddIfNotNull(this Dictionary<string, string> postData, string key, double? item)
+        {
+            if (item.HasValue)
+            {
+                postData.Add(key, item.Value.ToString());
+            }
+        }
+
         internal static void AddIfNotNull(this Dictionary<string, string> postData, string key, DateTime? item)
         {
             if (item.HasValue)

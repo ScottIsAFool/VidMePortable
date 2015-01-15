@@ -47,6 +47,9 @@
     <Compile Include="Model\Responses\ChannelResponse.cs" />
     <Compile Include="Model\Page.cs" />
     <Compile Include="Model\Parameters.cs" />
+    <Compile Include="Model\Comment.cs" />
+    <Compile Include="Model\Responses\CommentResponse.cs" />
+    <Compile Include="Model\Responses\CommentsResponse.cs" />
     <Compile Include="Model\Responses\Response.cs" />
     <Compile Include="Model\Auth.cs" />
     <Compile Include="Model\Responses\AuthResponse.cs" />
@@ -54,6 +57,7 @@
     <Compile Include="Model\Responses\ChannelsResponse.cs" />
     <Compile Include="Model\Responses\ErrorResponse.cs" />
     <Compile Include="Model\Responses\UserResponse.cs" />
+    <Compile Include="Model\SortDirection.cs" />
     <Compile Include="Model\Video.cs" />
     <Compile Include="Model\Responses\VideosResponse.cs" />
     <Compile Include="Model\Scope.cs" />
