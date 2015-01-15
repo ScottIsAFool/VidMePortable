@@ -19,9 +19,16 @@ namespace VidMePortable
         private readonly HttpClient _httpClient;
 
         public Auth AuthenticationInfo { get; private set; }
+        public string DeviceName { get; private set; }
+        public string Platform { get; private set; }
 
         public VidMeClient()
+            : this(string.Empty, string.Empty) { }
+
+        public VidMeClient(string deviceName, string platform)
         {
+            DeviceName = deviceName;
+            Platform = platform;
             _httpClient = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip });
         }
 
@@ -597,10 +604,14 @@ namespace VidMePortable
         {
             CheckExpirationDateIsOk();
 
-            return new Dictionary<string, string>
+            var postData = new Dictionary<string, string>
             {
                 {"token", AuthenticationInfo.Token}
             };
+            postData.AddIfNotNull("DEVICE", DeviceName);
+            postData.AddIfNotNull("PLATFORM", Platform);
+
+            return postData;
         }
     }
 }

@@ -63,6 +63,7 @@
     <Compile Include="Model\Scope.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\VidMeException.cs" />
+    <Compile Include="Model\Vote.cs" />
     <Compile Include="VidMeClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

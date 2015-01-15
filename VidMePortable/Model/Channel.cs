@@ -1,7 +1,6 @@
 ﻿using System;
 using Newtonsoft.Json;
 using PropertyChanged;
-using VidMePortable.Attributes;
 
 namespace VidMePortable.Model
 {
@@ -49,15 +48,5 @@ namespace VidMePortable.Model
 
         [JsonProperty("video_count")]
         public int VideoCount { get; set; }
-    }
-
-    public enum Vote
-    {
-        [Description("1")]
-        Up,
-        [Description("-1")]
-        Down,
-        [Description("0")]
-        Neutral
     }
 }
