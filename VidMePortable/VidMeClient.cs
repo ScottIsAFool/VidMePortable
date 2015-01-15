@@ -370,6 +370,35 @@ namespace VidMePortable
 
         #endregion
 
+        #region GeoFences Methods
+
+        public async Task<List<Geofence>> GetGeoFencesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var response = await Get<GeoFencesResponse>("geofences", cancellationToken: cancellationToken);
+            if (response != null)
+            {
+                return response.Geofences ?? new List<Geofence>();
+            }
+
+            return new List<Geofence>();
+        }
+
+        public async Task<List<Geofence>> SuggestGeoFencesAsync(string searchText = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var options = new Dictionary<string, string>();
+            options.AddIfNotNull("text", searchText);
+
+            var response = await Get<GeoFencesResponse>("geofences/suggest", options.ToQueryString(), cancellationToken);
+            if (response != null)
+            {
+                return response.Geofences ?? new List<Geofence>();
+            }
+
+            return new List<Geofence>();
+        }
+
+        #endregion
+
         #region User Methods
 
         public string GetUserAvatar(string userId)
