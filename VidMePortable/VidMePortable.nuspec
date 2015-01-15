@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
   <metadata>
-    <version>$version$</version>
+    <version>$version$-beta</version>
     <authors>ScottIsAFool</authors>
     <owners />
     <id>VidMePortable</id>
     <title />
+    <projectUrl>https://github.com/scottisafool/vidmeportable</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>A PCL for the vid.me API</description>
   </metadata>
