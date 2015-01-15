@@ -17,5 +17,17 @@ namespace VidMePortable.Model
 
         [JsonProperty("avatar_url")]
         public string AvatarUrl { get; set; }
+
+        [JsonProperty("cover")]
+        public string Cover { get; set; }
+
+        [JsonProperty("cover_url")]
+        public string CoverUrl { get; set; }
+
+        [JsonProperty("video_views")]
+        public string VideoViews { get; set; }
+
+        [JsonProperty("likes_count")]
+        public string LikesCount { get; set; }
     }
 }

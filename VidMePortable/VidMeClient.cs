@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -81,6 +82,58 @@ namespace VidMePortable
             var response = await Post<Response>(postData, "auth/delete", cancellationToken);
 
             return response != null && response.Status;
+        }
+
+        public string GetAuthUrl(string clientId, string redirectUrl, List<Scope> scopes)
+        {
+            if (string.IsNullOrEmpty(clientId))
+            {
+                throw new ArgumentNullException("clientId", "Client ID cannot be null or empty");
+            }
+
+            if (scopes.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException("scopes", "Scopes must be provided");
+            }
+
+            var scopesString = string.Join(" ", scopes.Select(x => x.GetDescription()));
+
+            return string.Format("https://vid.me/oauth/authorize?client_id={0}&redirect_uri={1}&scope={2}&response_type=token", clientId, redirectUrl, scopesString);
+        }
+
+        public async Task<AuthResponse> ExchangeCodeForTokenAsync(string code, string clientId, string clientSecret, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(code))
+            {
+                throw new ArgumentNullException("code", "code cannot be null or empty");
+            }
+
+            if (string.IsNullOrEmpty(clientId))
+            {
+                throw new ArgumentNullException("clientId", "Client ID cannot be null or empty");
+            }
+
+            if (string.IsNullOrEmpty(clientSecret))
+            {
+                throw new ArgumentNullException("clientSecret", "Client Secret cannot be null or empty");
+            }
+
+            var postData = new Dictionary<string, string>
+            {
+                {"grant_type", "client_credentials"},
+                {"client_id", clientId},
+                {"client_secret", clientSecret},
+                {"code", code}
+            };
+
+            var response = await Post<AuthResponse>(postData, "oauth/token", cancellationToken);
+
+            if (response != null)
+            {
+                SetAuthentication(response.Auth);
+            }
+
+            return response;
         }
 
         public void SetAuthentication(Auth authenticationInfo)
