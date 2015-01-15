@@ -672,6 +672,20 @@ namespace VidMePortable
             return response != null ? response.User : null;
         }
 
+        public async Task<List<UserTag>> SuggestedUsersAsync(string searchText = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var postData = CreatePostData(false);
+            postData.AddIfNotNull("text", searchText);
+
+            var response = await Post<UserTagsResponse>(postData, "users/suggest", cancellationToken);
+            if (response != null)
+            {
+                return response.UserTags ?? new List<UserTag>();
+            }
+
+            return new List<UserTag>();
+        }
+
         #endregion
 
         #region API Call methods

@@ -61,6 +61,8 @@
     <Compile Include="Model\Channel.cs" />
     <Compile Include="Model\Responses\ChannelsResponse.cs" />
     <Compile Include="Model\Responses\ErrorResponse.cs" />
+    <Compile Include="Model\UserTag.cs" />
+    <Compile Include="Model\Responses\UserTagsResponse.cs" />
     <Compile Include="Model\Tag.cs" />
     <Compile Include="Model\Responses\TagsResponse.cs" />
     <Compile Include="Model\Responses\UserResponse.cs" />
