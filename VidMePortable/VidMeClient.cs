@@ -145,6 +145,91 @@ namespace VidMePortable
 
         #endregion
 
+        #region Channel Methods
+
+        public async Task<Channel> GetChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(channelId))
+            {
+                throw new ArgumentNullException("channelId", "Channel ID cannot be null or empty");
+            }
+
+            var method = string.Format("channel/{0}", channelId);
+
+            var response = await Get<ChannelResponse>(method, cancellationToken: cancellationToken);
+
+            return response != null ? response.Channel : null;
+        }
+
+        public async Task<bool> FollowChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(channelId))
+            {
+                throw new ArgumentNullException("channelId", "Channel ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+            var method = string.Format("channel/{0}/follow", channelId);
+
+            var response = await Post<Response>(postData, method, cancellationToken);
+
+            return response != null && response.Status;
+        }
+
+        public async Task<VideosResponse> GetChannelsHotVideosAsync(string channelId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(channelId))
+            {
+                throw new ArgumentNullException("channelId", "Channel ID cannot be null or empty");
+            }
+
+            var method = string.Format("channel/{0}/hot", channelId);
+            var options = new Dictionary<string, string>();
+            options.AddIfNotNull("offset", offset);
+            options.AddIfNotNull("limit", limit);
+
+            var response = await Get<VideosResponse>(method, options.ToQueryString(), cancellationToken);
+            return response;
+        }
+
+        public async Task<VideosResponse> GetChannelsNewVideosAsync(string channelId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(channelId))
+            {
+                throw new ArgumentNullException("channelId", "Channel ID cannot be null or empty");
+            }
+
+            var method = string.Format("channel/{0}/new", channelId);
+            var options = new Dictionary<string, string>();
+            options.AddIfNotNull("offset", offset);
+            options.AddIfNotNull("limit", limit);
+
+            var response = await Get<VideosResponse>(method, options.ToQueryString(), cancellationToken);
+            return response;
+        }
+
+        public string GetChannelUrl(string channelId)
+        {
+            return CreateUrl(string.Format("channel/{0}/url", channelId));
+        }
+
+        public async Task<bool> UnFollowChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(channelId))
+            {
+                throw new ArgumentNullException("channelId", "Channel ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+            var method = string.Format("channel/{0}/unfollow", channelId);
+
+            var response = await Post<Response>(postData, method, cancellationToken);
+
+            return response != null && response.Status;
+        }
+
+        #endregion
+
         #region User Methods
 
         public string GetUserAvatar(string userId)

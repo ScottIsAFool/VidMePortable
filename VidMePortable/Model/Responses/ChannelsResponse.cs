@@ -8,5 +8,4 @@ namespace VidMePortable.Model.Responses
         [JsonProperty("channels")]
         public List<Channel> Channels { get; set; }
     }
-
 }
