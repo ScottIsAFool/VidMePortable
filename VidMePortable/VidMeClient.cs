@@ -228,6 +228,32 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        public async Task<List<Channel>> ListChannelsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var response = await Get<ChannelsResponse>("channels", cancellationToken: cancellationToken);
+            if (response != null)
+            {
+                return response.Channels ?? new List<Channel>();
+            }
+
+            return new List<Channel>();
+        }
+
+        public async Task<List<Channel>> ListSuggestedChannelsAsync(string text = null, int? number = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var options = new Dictionary<string, string>();
+            options.AddIfNotNull("text", text);
+            options.AddIfNotNull("number", number);
+
+            var response = await Get<ChannelsResponse>("channels/suggest", options.ToQueryString(), cancellationToken);
+            if (response != null)
+            {
+                return response.Channels ?? new List<Channel>();
+            }
+
+            return new List<Channel>();
+        }
+
         #endregion
 
         #region User Methods
