@@ -16,6 +16,7 @@
     <TargetFrameworkProfile>Profile259</TargetFrameworkProfile>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <NuGetPackageImportStamp>2b03a407</NuGetPackageImportStamp>
+    <NuSpecFile>VidMePortable.nuspec</NuSpecFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -37,6 +38,7 @@
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
     <None Include="packages.config" />
+    <None Include="VidMePortable.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Attributes\DescriptionAttribute.cs" />
@@ -44,6 +46,7 @@
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Extensions\StreamExtensions.cs" />
+    <Compile Include="IVidMeClient.cs" />
     <Compile Include="Model\AuthResponseType.cs" />
     <Compile Include="Model\Responses\ChannelResponse.cs" />
     <Compile Include="Model\Page.cs" />

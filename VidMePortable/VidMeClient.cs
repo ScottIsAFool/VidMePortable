@@ -13,7 +13,7 @@ using VidMePortable.Model.Responses;
 
 namespace VidMePortable
 {
-    public class VidMeClient
+    public class VidMeClient : IVidMeClient
     {
         private const string BaseUrl = "https://api.vid.me/";
         private readonly HttpClient _httpClient;
