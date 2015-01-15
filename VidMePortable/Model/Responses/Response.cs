@@ -5,6 +5,6 @@ namespace VidMePortable.Model.Responses
     public class Response
     {
         [JsonProperty("status")]
-        public bool Status { get; set; }
+        internal bool Status { get; set; }
     }
 }

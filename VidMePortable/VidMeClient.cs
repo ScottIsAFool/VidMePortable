@@ -7,7 +7,6 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using VidMePortable.Attributes;
 using VidMePortable.Extensions;
 using VidMePortable.Model;
 using VidMePortable.Model.Responses;
@@ -20,7 +19,7 @@ namespace VidMePortable
         private readonly HttpClient _httpClient;
 
         public Auth AuthenticationInfo { get; private set; }
-        public string DeviceName { get; private set; }
+        public string DeviceId { get; private set; }
         public string Platform { get; private set; }
 
         public VidMeClient()
@@ -28,9 +27,15 @@ namespace VidMePortable
 
         public VidMeClient(string deviceName, string platform)
         {
-            DeviceName = deviceName;
+            DeviceId = deviceName;
             Platform = platform;
             _httpClient = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip });
+        }
+
+        public void SetDeviceNameAndPlatform(string deviceId, string platform)
+        {
+            DeviceId = deviceId;
+            Platform = platform;
         }
 
         #region Auth Methods
@@ -688,6 +693,179 @@ namespace VidMePortable
 
         #endregion
 
+        #region Video Methods
+
+        public async Task<bool> DeleteVideoAsync(string videoId, string deletionToken = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(videoId))
+            {
+                throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData(false);
+            postData.AddIfNotNull("deleteToken", deletionToken);
+
+            var method = string.Format("video/{0}/delete", videoId);
+            var response = await Post<Response>(postData, method, cancellationToken);
+            return response != null && response.Status;
+        }
+
+        public async Task<Video> GetVideoAsync(string videoId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(videoId))
+            {
+                throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
+            }
+
+            var options = CreatePostData(false);
+            var method = string.Format("video/{0}", videoId);
+
+            var response = await Get<VideoResponse>(method, options.ToQueryString(), cancellationToken);
+            return response != null ? response.Video : null;
+        }
+
+        public async Task<Video> EditVideoAsync(string videoId, VideoRequest request = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(videoId))
+            {
+                throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData(false);
+            if (request != null)
+            {
+                postData.AddIfNotNull("title", request.Title);
+                postData.AddIfNotNull("description", request.Description);
+                postData.AddIfNotNull("thumbnail", await request.ThumbnailStream.ToBase64String());
+                postData.AddIfNotNull("source", request.VideoSource);
+                postData.AddIfNotNull("latitude", request.Latitude);
+                postData.AddIfNotNull("longitude", request.Longitude);
+                postData.AddIfNotNull("place_id", request.FourSquarePlaceId);
+                postData.AddIfNotNull("place_name", request.FourSquarePlaceName);
+                postData.AddIfNotNull("private", request.IsPrivate);
+            }
+
+            var method = string.Format("video/{0}/edit", videoId);
+
+            var response = await Post<VideoResponse>(postData, method, cancellationToken);
+            return response != null ? response.Video : null;
+        }
+
+        public async Task<Video> FlagVideoAsync(string videoId, bool isFlagged, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(videoId))
+            {
+                throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+            postData.Add("flagged", isFlagged ? "1" : "0");
+
+            var method = string.Format("video/{0}/flag", videoId);
+
+            var response = await Post<VideoResponse>(postData, method, cancellationToken);
+            return response != null ? response.Video : null;
+        }
+
+        public async Task<VideoRequestResponse> RequestVideoAsync(VideoRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var postData = CreatePostData(false);
+            if (request != null)
+            {
+                postData.AddIfNotNull("title", request.Title);
+                postData.AddIfNotNull("description", request.Description);
+                postData.AddIfNotNull("thumbnail", await request.ThumbnailStream.ToBase64String());
+                postData.AddIfNotNull("source", request.VideoSource);
+                postData.AddIfNotNull("latitude", request.Latitude);
+                postData.AddIfNotNull("longitude", request.Longitude);
+                postData.AddIfNotNull("place_id", request.FourSquarePlaceId);
+                postData.AddIfNotNull("place_name", request.FourSquarePlaceName);
+                postData.AddIfNotNull("private", request.IsPrivate);
+            }
+            
+            var response = await Post<VideoRequestResponse>(postData, "video/request", cancellationToken);
+            return response;
+        }
+
+        public string GetVideoThumbnail(string videoId)
+        {
+            return CreateUrl(string.Format("video/{0}/thumbnail", videoId));
+        }
+
+        public async Task<bool> UpdateVideoTitleAsync(string videoCode, string title, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(videoCode))
+            {
+                throw new ArgumentNullException("videoCode", "A video code must be provided");
+            }
+
+            if (string.IsNullOrEmpty(title))
+            {
+                throw new ArgumentNullException("title", "Title cannot be null or empty");
+            }
+
+            if (string.IsNullOrEmpty(DeviceId))
+            {
+                throw new InvalidOperationException("You must have set a device id");
+            }
+
+            var postData = CreatePostData();
+            postData.AddIfNotNull("code", videoCode);
+            postData.AddIfNotNull("title", title);
+
+            var response = await Post<Response>(postData, "video/update-title", cancellationToken);
+            return response != null && response.Status;
+        }
+
+        public async Task<VideoUploadResponse> UploadVideoAsync(string videoCode, Stream videoStream, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(videoCode))
+            {
+                throw new ArgumentNullException("videoCode", "A valid video code must be used from the RequestVideo method.");
+            }
+
+            if (videoStream == null || videoStream.Length == 0)
+            {
+                throw new ArgumentNullException("videoStream", "Invalid video stream passed through");
+            }
+
+            var postData = CreatePostData(false);
+            postData.AddIfNotNull("code", videoCode);
+            postData.AddIfNotNull("filedata", await videoStream.ToBase64String());
+
+            var response = await Post<VideoUploadResponse>(postData, "video/upload", cancellationToken);
+            return response;
+        }
+
+        public async Task<VideoUploadResponse> UploadVideoAsync(VideoRequest request, Stream videoStream, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (videoStream == null || videoStream.Length == 0)
+            {
+                throw new ArgumentNullException("videoStream", "Invalid video stream passed through");
+            }
+
+            var postData = CreatePostData(false);
+            if (request != null)
+            {
+                postData.AddIfNotNull("channel", request.ChannelId);
+                postData.AddIfNotNull("size", request.VideoSize);
+                postData.AddIfNotNull("title", request.Title);
+                postData.AddIfNotNull("description", request.Description);
+                postData.AddIfNotNull("source", request.VideoSource);
+                postData.AddIfNotNull("latitude", request.Latitude);
+                postData.AddIfNotNull("longitude", request.Longitude);
+                postData.AddIfNotNull("place_id", request.FourSquarePlaceId);
+                postData.AddIfNotNull("place_name", request.FourSquarePlaceName);
+                postData.AddIfNotNull("private", request.IsPrivate);
+                postData.AddIfNotNull("filename", request.FileName);
+            }
+
+            var response = await Post<VideoUploadResponse>(postData, "video/upload", cancellationToken);
+            return response;
+        }
+
+        #endregion
+
         #region API Call methods
         private async Task<TReturnType> Post<TReturnType>(Dictionary<string, string> postData, string method, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -748,7 +926,7 @@ namespace VidMePortable
             {
                 postData.Add("token", AuthenticationInfo.Token);
             }
-            postData.AddIfNotNull("DEVICE", DeviceName);
+            postData.AddIfNotNull("DEVICE", DeviceId);
             postData.AddIfNotNull("PLATFORM", Platform);
 
             return postData;
