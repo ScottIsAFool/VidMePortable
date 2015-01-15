@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -26,6 +27,7 @@ namespace VidMePortable
 
         #region Auth Methods
 
+        [Obsolete("This method will work, but the oauth way is preferred")]
         public async Task<AuthResponse> AuthenticateAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(username))
@@ -205,7 +207,7 @@ namespace VidMePortable
             {
                 throw new ArgumentNullException("userId", "User Id cannot be null or empty");
             }
-
+            
             var postData = CreatePostData();
 
             postData.AddIfNotNull("username", username);
@@ -223,6 +225,104 @@ namespace VidMePortable
             }
 
             return response;
+        }
+
+        public async Task<bool> FollowUserAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "User ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+
+            var method = string.Format("user/{0}/follow", userId);
+
+            var response = await Post<Response>(postData, method, cancellationToken);
+
+            return response != null && response.Status;
+        }
+
+        public async Task<List<Channel>> GetUsersFollowedChannelsAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "User ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+            var method = string.Format("user/{0}/follows-channels", userId);
+
+            var response = await Post<ChannelsResponse>(postData, method, cancellationToken);
+
+            if (response != null)
+            {
+                return response.Channels ?? new List<Channel>();
+            }
+
+            return new List<Channel>();
+        }
+
+        public async Task<bool> RemoveAvatarAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "User ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+            var method = string.Format("user/{0}/avatar/remove", userId);
+
+            var response = await Post<AuthResponse>(postData, method, cancellationToken);
+
+            return response != null && response.Status;
+        }
+
+        public async Task<bool> UnfollowUserAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "User ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+            var method = string.Format("user/{0}/unfollow", userId);
+
+            var response = await Post<Response>(postData, method, cancellationToken);
+
+            return response != null && response.Status;
+        }
+
+        public async Task<User> UpdateAvatarAsync(string userId, Stream imageStream, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "User ID cannot be null or empty");
+            }
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await imageStream.CopyToAsync(memoryStream);
+                return await UpdateAvatarAsync(userId, memoryStream.ToArray(), cancellationToken);
+            }
+        }
+
+        public async Task<User> UpdateAvatarAsync(string userId, byte[] imageStream, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "User ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData();
+            var imageData = Convert.ToBase64String(imageStream);
+            postData.Add("filedata", imageData);
+
+            var method = string.Format("user/{0}/avatar/update", userId);
+
+            var response = await Post<UserResponse>(postData, method, cancellationToken);
+
+            return response != null ? response.User : null;
         }
 
         #endregion
@@ -277,6 +377,8 @@ namespace VidMePortable
 
         private Dictionary<string, string> CreatePostData()
         {
+            CheckExpirationDateIsOk();
+
             return new Dictionary<string, string>
             {
                 {"token", AuthenticationInfo.Token}

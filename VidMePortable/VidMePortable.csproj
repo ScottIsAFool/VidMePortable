@@ -44,9 +44,11 @@
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
     <Compile Include="Model\AuthResponseType.cs" />
-    <Compile Include="Model\BaseItem.cs" />
+    <Compile Include="Model\Responses\Response.cs" />
     <Compile Include="Model\Auth.cs" />
     <Compile Include="Model\Responses\AuthResponse.cs" />
+    <Compile Include="Model\Channel.cs" />
+    <Compile Include="Model\Responses\ChannelsResponse.cs" />
     <Compile Include="Model\Responses\ErrorResponse.cs" />
     <Compile Include="Model\Responses\UserResponse.cs" />
     <Compile Include="Model\Scope.cs" />

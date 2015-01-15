@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace VidMePortable.Model
+namespace VidMePortable.Model.Responses
 {
     public class Response
     {
