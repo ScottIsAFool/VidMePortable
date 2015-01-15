@@ -51,7 +51,10 @@
     <Compile Include="Model\Responses\CommentResponse.cs" />
     <Compile Include="Model\Responses\CommentsResponse.cs" />
     <Compile Include="Model\Geofence.cs" />
+    <Compile Include="Model\Data.cs" />
     <Compile Include="Model\Responses\GeoFencesResponse.cs" />
+    <Compile Include="Model\Notification.cs" />
+    <Compile Include="Model\Responses\NotificationsResponse.cs" />
     <Compile Include="Model\Responses\Response.cs" />
     <Compile Include="Model\Auth.cs" />
     <Compile Include="Model\Responses\AuthResponse.cs" />

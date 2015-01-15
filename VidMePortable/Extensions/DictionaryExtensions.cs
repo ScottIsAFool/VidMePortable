@@ -58,7 +58,8 @@ namespace VidMePortable.Extensions
         {
             if (item != null && item.Any())
             {
-                postData.Add(key, string.Join(",", item));
+                var data = string.Format("[{0}]", string.Join(",", item));
+                postData.Add(key, data);
             }
         }
     }

@@ -434,6 +434,46 @@ namespace VidMePortable
 
         #endregion
 
+        #region Notifications Methods
+
+        public async Task<List<Notification>> GetNotificationsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var postData = CreatePostData();
+
+            var response = await Post<NotificationsResponse>(postData, "notifications", cancellationToken);
+            if (response != null)
+            {
+                return response.Notifications ?? new List<Notification>();
+            }
+
+            return new List<Notification>();
+        }
+
+        public async Task<bool> MarkNotificationsAsReadAsync(List<string> notificationIds, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (notificationIds.IsNullOrEmpty())
+            {
+                throw new ArgumentNullException("notificationIds", "You must provide a list of notification IDs");
+            }
+
+            var postData = CreatePostData();
+            postData.AddIfNotNull("notifications", notificationIds);
+
+            var response = await Post<Response>(postData, "notifications/mark-read", cancellationToken);
+            return response != null && response.Status;
+        }
+
+        public async Task<bool> MarkAllNotificationsAsReadAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var postData = CreatePostData();
+            postData.Add("notifications", "all");
+
+            var response = await Post<Response>(postData, "notifications/mark-read", cancellationToken);
+            return response != null && response.Status;
+        }
+
+        #endregion
+
         #region User Methods
 
         public string GetUserAvatar(string userId)
