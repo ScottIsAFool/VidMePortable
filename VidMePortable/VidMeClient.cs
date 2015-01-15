@@ -474,6 +474,24 @@ namespace VidMePortable
 
         #endregion
 
+        #region Tags Methods
+
+        public async Task<List<Tag>> SuggestedTagsAsync(string searchText = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var postData = CreatePostData(false);
+            postData.AddIfNotNull("text", searchText);
+
+            var response = await Post<TagsResponse>(postData, "tags/suggest", cancellationToken);
+            if (response != null)
+            {
+                return response.Tags ?? new List<Tag>();
+            }
+
+            return new List<Tag>();
+        }
+
+        #endregion
+
         #region User Methods
 
         public string GetUserAvatar(string userId)
