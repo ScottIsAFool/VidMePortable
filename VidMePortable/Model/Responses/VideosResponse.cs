@@ -3,11 +3,8 @@ using Newtonsoft.Json;
 
 namespace VidMePortable.Model.Responses
 {
-    public class VideosResponse
+    public class VideosResponse : Response
     {
-        [JsonProperty("status")]
-        public bool Status { get; set; }
-
         [JsonProperty("page")]
         public Page Page { get; set; }
 
@@ -23,5 +20,4 @@ namespace VidMePortable.Model.Responses
         [JsonProperty("viewerVotes")]
         public object[] ViewerVotes { get; set; }
     }
-
 }

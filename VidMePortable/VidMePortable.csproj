@@ -59,6 +59,8 @@
     <Compile Include="Model\Responses\ChannelsResponse.cs" />
     <Compile Include="Model\Responses\ErrorResponse.cs" />
     <Compile Include="Model\Responses\UserResponse.cs" />
+    <Compile Include="Model\Responses\VideoInfoResponse.cs" />
+    <Compile Include="Model\Responses\VideoResponse.cs" />
     <Compile Include="Model\SortDirection.cs" />
     <Compile Include="Model\Video.cs" />
     <Compile Include="Model\Responses\VideosResponse.cs" />

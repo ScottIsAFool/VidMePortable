@@ -7,6 +7,7 @@ using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using VidMePortable.Attributes;
 using VidMePortable.Extensions;
 using VidMePortable.Model;
 using VidMePortable.Model.Responses;
@@ -399,6 +400,40 @@ namespace VidMePortable
 
         #endregion
 
+        #region Grab Methods
+
+        public async Task<Video> GrabExternalVideoAsync(string externalUrl, string title = null, string description = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(externalUrl))
+            {
+                throw new ArgumentNullException("externalUrl", "External URL cannot be null or empty");
+            }
+
+            var postData = CreatePostData(false);
+            postData.AddIfNotNull("url", externalUrl);
+            postData.AddIfNotNull("title", title);
+            postData.AddIfNotNull("description", description);
+
+            var response = await Post<VideoResponse>(postData, "grab", cancellationToken);
+            return response != null ? response.Video : null;
+        }
+
+        public async Task<VideoInfoResponse> GrabExternalVideoInfoAsync(string externalUrl, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(externalUrl))
+            {
+                throw new ArgumentNullException("externalUrl", "External URL cannot be null or empty");
+            }
+
+            var options = new Dictionary<string, string>();
+            options.AddIfNotNull("url", externalUrl);
+
+            var response = await Get<VideoInfoResponse>("grab/preview", options.ToQueryString(), cancellationToken);
+            return response;
+        }
+
+        #endregion
+
         #region User Methods
 
         public string GetUserAvatar(string userId)
@@ -629,14 +664,18 @@ namespace VidMePortable
             return string.Format("{0}{1}?{2}", BaseUrl, method, options);
         }
 
-        private Dictionary<string, string> CreatePostData()
+        private Dictionary<string, string> CreatePostData(bool tokenRequred = true)
         {
-            CheckExpirationDateIsOk();
-
-            var postData = new Dictionary<string, string>
+            var postData = new Dictionary<string, string>();
+            if (tokenRequred)
             {
-                {"token", AuthenticationInfo.Token}
-            };
+                CheckExpirationDateIsOk();
+            }
+
+            if(AuthenticationInfo != null)
+            {
+                postData.Add("token", AuthenticationInfo.Token);
+            }
             postData.AddIfNotNull("DEVICE", DeviceName);
             postData.AddIfNotNull("PLATFORM", Platform);
 
