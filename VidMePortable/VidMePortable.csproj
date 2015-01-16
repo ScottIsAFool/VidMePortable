@@ -50,6 +50,7 @@
     <Compile Include="Extensions\StreamExtensions.cs" />
     <Compile Include="IVidMeClient.cs" />
     <Compile Include="Model\AuthResponseType.cs" />
+    <Compile Include="Model\AuthType.cs" />
     <Compile Include="Model\Responses\ChannelResponse.cs" />
     <Compile Include="Model\Page.cs" />
     <Compile Include="Model\Parameters.cs" />

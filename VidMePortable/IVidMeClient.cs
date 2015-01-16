@@ -20,7 +20,7 @@ namespace VidMePortable
 
         Task<AuthResponse> CheckAuthTokenAsync(CancellationToken cancellationToken = default(CancellationToken));
         Task<bool> DeleteAuthTokenAsync(CancellationToken cancellationToken = default(CancellationToken));
-        string GetAuthUrl(string clientId, string redirectUrl, List<Scope> scopes);
+        string GetAuthUrl(string clientId, string redirectUrl, List<Scope> scopes, AuthType type = AuthType.Code);
         Task<AuthResponse> ExchangeCodeForTokenAsync(string code, string clientId, string clientSecret, CancellationToken cancellationToken = default(CancellationToken));
         void SetAuthentication(Auth authenticationInfo);
         Task<Channel> GetChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken));

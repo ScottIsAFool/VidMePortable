@@ -99,7 +99,7 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
-        public string GetAuthUrl(string clientId, string redirectUrl, List<Scope> scopes)
+        public string GetAuthUrl(string clientId, string redirectUrl, List<Scope> scopes, AuthType type = AuthType.Code)
         {
             if (string.IsNullOrEmpty(clientId))
             {
@@ -113,7 +113,7 @@ namespace VidMePortable
 
             var scopesString = string.Join(" ", scopes.Select(x => x.GetDescription()));
 
-            return string.Format("https://vid.me/oauth/authorize?client_id={0}&redirect_uri={1}&scope={2}&response_type=token", clientId, redirectUrl, scopesString);
+            return string.Format("https://vid.me/oauth/authorize?client_id={0}&redirect_uri={1}&scope={2}&response_type={3}", clientId, redirectUrl, scopesString, type.ToString().ToLower());
         }
 
         public async Task<AuthResponse> ExchangeCodeForTokenAsync(string code, string clientId, string clientSecret, CancellationToken cancellationToken = default(CancellationToken))
