@@ -396,20 +396,24 @@ namespace VidMePortable
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <param name="imageStream">The image stream.</param>
+        /// <param name="contentType"></param>
+        /// <param name="filename"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
-        Task<User> UpdateAvatarAsync(string userId, Stream imageStream, CancellationToken cancellationToken = default(CancellationToken));
+        Task<User> UpdateAvatarAsync(string userId, Stream imageStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Updates the avatar.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <param name="imageStream">The image stream.</param>
+        /// <param name="contentType"></param>
+        /// <param name="filename"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
-        Task<User> UpdateAvatarAsync(string userId, byte[] imageStream, CancellationToken cancellationToken = default(CancellationToken));
+        Task<User> UpdateAvatarAsync(string userId, byte[] imageStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Suggesteds the users.
@@ -469,6 +473,17 @@ namespace VidMePortable
         Task<Video> EditVideoAsync(string videoId, VideoRequest request = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Updates the video thumbnail.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="thumbnailStream">The thumbnail stream.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <param name="filename">The filename.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<Video> UpdateVideoThumbnailAsync(string videoId, Stream thumbnailStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Flags the video.
         /// </summary>
         /// <param name="videoId">The video identifier.</param>
@@ -512,6 +527,8 @@ namespace VidMePortable
         /// Uploads the video.
         /// </summary>
         /// <param name="videoCode">The video code.</param>
+        /// <param name="contentType"></param>
+        /// <param name="filename"></param>
         /// <param name="videoStream">The video stream.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
@@ -520,17 +537,19 @@ namespace VidMePortable
         /// or
         /// videoStream;Invalid video stream passed through
         /// </exception>
-        Task<VideoUploadResponse> UploadVideoAsync(string videoCode, Stream videoStream, CancellationToken cancellationToken = default(CancellationToken));
+        Task<VideoUploadResponse> UploadVideoAsync(string videoCode, string contentType, string filename, Stream videoStream, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Uploads the video.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <param name="videoStream">The video stream.</param>
+        /// <param name="contentType"></param>
+        /// <param name="fileName"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">videoStream;Invalid video stream passed through</exception>
-        Task<VideoUploadResponse> UploadVideoAsync(VideoRequest request, Stream videoStream, CancellationToken cancellationToken = default(CancellationToken));
+        Task<VideoUploadResponse> UploadVideoAsync(VideoRequest request, Stream videoStream, string contentType, string fileName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Locations the search.

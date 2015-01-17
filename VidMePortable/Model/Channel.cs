@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using PropertyChanged;
+using VidMePortable.Converters;
 
 namespace VidMePortable.Model
 {
@@ -29,7 +30,8 @@ namespace VidMePortable.Model
         public string Description { get; set; }
 
         [JsonProperty("date_created")]
-        public DateTime DateCreated { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
+        public DateTime? DateCreated { get; set; }
 
         [JsonProperty("is_default")]
         public bool IsDefault { get; set; }

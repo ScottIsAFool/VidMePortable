@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using PropertyChanged;
+using VidMePortable.Converters;
 
 namespace VidMePortable.Model
 {
@@ -38,22 +39,25 @@ namespace VidMePortable.Model
         public string Description { get; set; }
 
         [JsonProperty("duration")]
-        public double Duration { get; set; }
+        public double? Duration { get; set; }
 
         [JsonProperty("height")]
-        public double Height { get; set; }
+        public double? Height { get; set; }
 
         [JsonProperty("width")]
-        public double Width { get; set; }
+        public double? Width { get; set; }
 
         [JsonProperty("date_created")]
-        public DateTime DateCreated { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
+        public DateTime? DateCreated { get; set; }
 
         [JsonProperty("date_stored")]
-        public DateTime DateStored { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
+        public DateTime? DateStored { get; set; }
 
         [JsonProperty("date_completed")]
-        public DateTime DateCompleted { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
+        public DateTime? DateCompleted { get; set; }
 
         [JsonProperty("comment_count")]
         public int CommentCount { get; set; }

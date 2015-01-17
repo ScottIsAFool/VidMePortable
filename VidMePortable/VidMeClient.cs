@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -958,10 +959,12 @@ namespace VidMePortable
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <param name="imageStream">The image stream.</param>
+        /// <param name="filename"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <param name="contentType"></param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
-        public async Task<User> UpdateAvatarAsync(string userId, Stream imageStream, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<User> UpdateAvatarAsync(string userId, Stream imageStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
             {
@@ -971,7 +974,7 @@ namespace VidMePortable
             using (var memoryStream = new MemoryStream())
             {
                 await imageStream.CopyToAsync(memoryStream);
-                return await UpdateAvatarAsync(userId, memoryStream.ToArray(), cancellationToken);
+                return await UpdateAvatarAsync(userId, memoryStream.ToArray(), contentType, filename, cancellationToken);
             }
         }
 
@@ -980,10 +983,12 @@ namespace VidMePortable
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <param name="imageStream">The image stream.</param>
+        /// <param name="contentType"></param>
+        /// <param name="filename"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
-        public async Task<User> UpdateAvatarAsync(string userId, byte[] imageStream, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<User> UpdateAvatarAsync(string userId, byte[] imageStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
             {
@@ -991,12 +996,10 @@ namespace VidMePortable
             }
 
             var postData = CreatePostData();
-            var imageData = Convert.ToBase64String(imageStream);
-            postData.Add("filedata", imageData);
 
             var method = string.Format("user/{0}/avatar/update", userId);
 
-            var response = await Post<UserResponse>(postData, method, cancellationToken);
+            var response = await PostFile<UserResponse>(postData, method, imageStream, contentType, filename, cancellationToken);
 
             return response != null ? response.User : null;
         }
@@ -1041,6 +1044,9 @@ namespace VidMePortable
             options.AddIfNotNull("user", userId);
             options.AddIfNotNull("offset", offset);
             options.AddIfNotNull("limit", limit);
+            options.AddIfNotNull("moderated", "0");
+            options.AddIfNotNull("state", "success");
+            options.AddIfNotNull("minVideoId", "0");
 
             var response = await Post<VideosResponse>(options, "videos/list", cancellationToken);
             return response;
@@ -1135,7 +1141,6 @@ namespace VidMePortable
             {
                 postData.AddIfNotNull("title", request.Title);
                 postData.AddIfNotNull("description", request.Description);
-                postData.AddIfNotNull("thumbnail", await request.ThumbnailStream.ToBase64String());
                 postData.AddIfNotNull("source", request.VideoSource);
                 postData.AddIfNotNull("latitude", request.Latitude);
                 postData.AddIfNotNull("longitude", request.Longitude);
@@ -1148,6 +1153,43 @@ namespace VidMePortable
 
             var response = await Post<VideoResponse>(postData, method, cancellationToken);
             return response != null ? response.Video : null;
+        }
+
+        /// <summary>
+        /// Updates the video thumbnail.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="thumbnailStream">The thumbnail stream.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <param name="filename">The filename.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// videoId;Video ID cannot be null or empty
+        /// or
+        /// thumbnailStream;Must provide a valid image
+        /// </exception>
+        public async Task<Video> UpdateVideoThumbnailAsync(string videoId, Stream thumbnailStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(videoId))
+            {
+                throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
+            }
+
+            if (thumbnailStream == null)
+            {
+                throw new ArgumentNullException("thumbnailStream", "Must provide a valid image");
+            }
+
+            var postData = CreatePostData(false);
+            var method = string.Format("video/{0}/edit", videoId);
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await thumbnailStream.CopyToAsync(memoryStream);
+                var response = await PostFile<VideoResponse>(postData, method, memoryStream.ToArray(), contentType, filename, cancellationToken);
+                return response != null ? response.Video : null;
+            }
         }
 
         /// <summary>
@@ -1252,6 +1294,8 @@ namespace VidMePortable
         /// Uploads the video.
         /// </summary>
         /// <param name="videoCode">The video code.</param>
+        /// <param name="contentType"></param>
+        /// <param name="filename"></param>
         /// <param name="videoStream">The video stream.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
@@ -1260,7 +1304,7 @@ namespace VidMePortable
         /// or
         /// videoStream;Invalid video stream passed through
         /// </exception>
-        public async Task<VideoUploadResponse> UploadVideoAsync(string videoCode, Stream videoStream, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<VideoUploadResponse> UploadVideoAsync(string videoCode, string contentType, string filename, Stream videoStream, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoCode))
             {
@@ -1274,10 +1318,12 @@ namespace VidMePortable
 
             var postData = CreatePostData(false);
             postData.AddIfNotNull("code", videoCode);
-            postData.AddIfNotNull("filedata", await videoStream.ToBase64String());
 
-            var response = await Post<VideoUploadResponse>(postData, "video/upload", cancellationToken);
-            return response;
+            using (var m = await videoStream.ToMemoryStream())
+            {
+                var response = await PostFile<VideoUploadResponse>(postData, "video/upload", m.ToArray(), contentType, filename, cancellationToken);
+                return response;
+            }
         }
 
         /// <summary>
@@ -1285,10 +1331,12 @@ namespace VidMePortable
         /// </summary>
         /// <param name="request">The request.</param>
         /// <param name="videoStream">The video stream.</param>
+        /// <param name="contentType"></param>
+        /// <param name="fileName"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">videoStream;Invalid video stream passed through</exception>
-        public async Task<VideoUploadResponse> UploadVideoAsync(VideoRequest request, Stream videoStream, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<VideoUploadResponse> UploadVideoAsync(VideoRequest request, Stream videoStream, string contentType, string fileName, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (videoStream == null || videoStream.Length == 0)
             {
@@ -1311,8 +1359,11 @@ namespace VidMePortable
                 postData.AddIfNotNull("filename", request.FileName);
             }
 
-            var response = await Post<VideoUploadResponse>(postData, "video/upload", cancellationToken);
-            return response;
+            using (var m = await videoStream.ToMemoryStream())
+            {
+                var response = await PostFile<VideoUploadResponse>(postData, "video/upload", m.ToArray(), contentType, fileName, cancellationToken);
+                return response;
+            }
         }
 
         #endregion
@@ -1391,6 +1442,26 @@ namespace VidMePortable
             var url = CreateUrl(method);
 
             var response = await _httpClient.PostAsync(url, new FormUrlEncodedContent(postData), cancellationToken);
+
+            return await HandleResponse<TReturnType>(response);
+        }
+
+        private async Task<TReturnType> PostFile<TReturnType>(Dictionary<string, string> postData, string method, byte[] fileData, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var url = CreateUrl(method);
+
+            var form = new MultipartFormDataContent();
+
+            foreach (var item in postData)
+            {
+                form.Add(new StringContent(item.Value), item.Key);
+            }
+
+            var byteContent = new ByteArrayContent(fileData, 0, fileData.Count());
+            byteContent.Headers.ContentType = new MediaTypeHeaderValue(contentType);
+            form.Add(byteContent, "filedata", filename);
+
+            var response = await _httpClient.PostAsync(url, form, cancellationToken);
 
             return await HandleResponse<TReturnType>(response);
         }

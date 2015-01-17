@@ -20,5 +20,14 @@ namespace VidMePortable.Extensions
                 return Convert.ToBase64String(bytes);
             }
         }
+
+        public static async Task<MemoryStream> ToMemoryStream(this Stream stream)
+        {
+            using (var memoryStream = new MemoryStream())
+            {
+                await stream.CopyToAsync(memoryStream);
+                return memoryStream;
+            }
+        }
     }
 }

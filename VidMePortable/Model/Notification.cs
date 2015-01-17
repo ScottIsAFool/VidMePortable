@@ -1,6 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 using PropertyChanged;
+using VidMePortable.Converters;
 
 namespace VidMePortable.Model
 {
@@ -23,7 +24,8 @@ namespace VidMePortable.Model
         public bool Read { get; set; }
 
         [JsonProperty("date_created")]
-        public DateTime DateCreated { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
+        public DateTime? DateCreated { get; set; }
 
         [JsonProperty("html")]
         public string Html { get; set; }
