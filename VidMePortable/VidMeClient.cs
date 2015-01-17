@@ -892,6 +892,69 @@ namespace VidMePortable
 
         #endregion
 
+        #region Search Methods
+
+        /// <summary>
+        /// Locations the search asynchronous.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.InvalidOperationException">
+        /// You must supply a valid request
+        /// or
+        /// You must supply either long/lat or a geofence ID
+        /// </exception>
+        public async Task<VideosResponse> LocationSearchAsync(LocationRequest request, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (request == null)
+            {
+                throw new InvalidOperationException("You must supply a valid request");
+            }
+
+            if (request.Latitude == null && request.Longitude == null && string.IsNullOrEmpty(request.GeofenceId))
+            {
+                throw new InvalidOperationException("You must supply either long/lat or a geofence ID");
+            }
+
+            var postData = CreatePostData(false);
+            if (string.IsNullOrEmpty(request.GeofenceId))
+            {
+                postData.AddIfNotNull("latitude", request.Latitude);
+                postData.AddIfNotNull("longitude", request.Longitude);
+                postData.AddIfNotNull("from", request.From);
+                postData.AddIfNotNull("to", request.To);
+                postData.AddIfNotNull("distance", request.Distance);
+            }
+            else
+            {
+                postData.AddIfNotNull("geofence", request.GeofenceId);
+            }
+
+            postData.AddIfNotNull("offset", request.Offset);
+            postData.AddIfNotNull("limit", request.Limit);
+            postData.AddIfNotNull("order", request.LocationOrderBy);
+
+            var response = await Post<VideosResponse>(postData, "videos/location", cancellationToken);
+            return response;
+        }
+
+        public async Task<VideosResponse> SearchVideosAsync(string searchText, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(searchText))
+            {
+                throw new ArgumentNullException("searchText", "Search text cannot be null or empty");
+            }
+
+            var postData = CreatePostData(false);
+            postData.AddIfNotNull("query", searchText);
+
+            var response = await Get<VideosResponse>("videos/search", postData.ToQueryString(), cancellationToken);
+            return response;
+        }
+
+        #endregion
+
         #region API Call methods
         private async Task<TReturnType> Post<TReturnType>(Dictionary<string, string> postData, string method, CancellationToken cancellationToken = default(CancellationToken))
         {
