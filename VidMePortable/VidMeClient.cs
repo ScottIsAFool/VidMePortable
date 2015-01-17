@@ -1056,8 +1056,12 @@ namespace VidMePortable
         public async Task<VideosResponse> GetAnonymousVideosAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var options = CreatePostData(false);
+            options.AddIfNotNull("user", "0");
             options.AddIfNotNull("offset", offset);
             options.AddIfNotNull("limit", limit);
+            options.AddIfNotNull("moderated", "0");
+            options.AddIfNotNull("state", "success");
+            options.AddIfNotNull("minVideoId", "0");
 
             var response = await Post<VideosResponse>(options, "videos/list", cancellationToken);
             return response;
@@ -1441,8 +1445,8 @@ namespace VidMePortable
             {
                 postData.Add("token", AuthenticationInfo.Token);
             }
-            postData.AddIfNotNull("DEVICE", DeviceId);
-            postData.AddIfNotNull("PLATFORM", Platform);
+            postData.AddIfNotNull("DEVICE".ToLower(), DeviceId);
+            postData.AddIfNotNull("device_PLATFORM".ToLower(), Platform);
 
             return postData;
         }

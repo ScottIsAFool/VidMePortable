@@ -14,8 +14,8 @@ namespace VidMePortable.Model.Responses
         [JsonProperty("videos")]
         public List<Video> Videos { get; set; }
 
-        [JsonProperty("watching")]
-        public object[] Watching { get; set; }
+        //[JsonProperty("watching")]
+        //public object[] Watching { get; set; }
 
         [JsonProperty("viewerVotes")]
         public object[] ViewerVotes { get; set; }
