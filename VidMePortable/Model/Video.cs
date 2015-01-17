@@ -41,10 +41,10 @@ namespace VidMePortable.Model
         public double Duration { get; set; }
 
         [JsonProperty("height")]
-        public int Height { get; set; }
+        public double Height { get; set; }
 
         [JsonProperty("width")]
-        public int Width { get; set; }
+        public double Width { get; set; }
 
         [JsonProperty("date_created")]
         public DateTime DateCreated { get; set; }
@@ -98,16 +98,16 @@ namespace VidMePortable.Model
         public bool Private { get; set; }
 
         [JsonProperty("latitude")]
-        public int Latitude { get; set; }
+        public double Latitude { get; set; }
 
         [JsonProperty("longitude")]
-        public int Longitude { get; set; }
+        public double Longitude { get; set; }
 
         [JsonProperty("place_id")]
-        public object PlaceId { get; set; }
+        public string PlaceId { get; set; }
 
         [JsonProperty("place_name")]
-        public object PlaceName { get; set; }
+        public string PlaceName { get; set; }
 
         [JsonProperty("colors")]
         public string Colors { get; set; }
