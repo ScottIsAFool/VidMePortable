@@ -18,13 +18,39 @@ namespace VidMePortable
         private const string BaseUrl = "https://api.vid.me/";
         private readonly HttpClient _httpClient;
 
+        /// <summary>
+        /// Gets the authentication information.
+        /// </summary>
+        /// <value>
+        /// The authentication information.
+        /// </value>
         public Auth AuthenticationInfo { get; private set; }
+        /// <summary>
+        /// Gets the device identifier.
+        /// </summary>
+        /// <value>
+        /// The device identifier.
+        /// </value>
         public string DeviceId { get; private set; }
+        /// <summary>
+        /// Gets the platform.
+        /// </summary>
+        /// <value>
+        /// The platform.
+        /// </value>
         public string Platform { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VidMeClient"/> class.
+        /// </summary>
         public VidMeClient()
             : this(string.Empty, string.Empty) { }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="VidMeClient"/> class.
+        /// </summary>
+        /// <param name="deviceName">Name of the device.</param>
+        /// <param name="platform">The platform.</param>
         public VidMeClient(string deviceName, string platform)
         {
             DeviceId = deviceName;
@@ -32,6 +58,11 @@ namespace VidMePortable
             _httpClient = new HttpClient(new HttpClientHandler { AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip });
         }
 
+        /// <summary>
+        /// Sets the device name and platform.
+        /// </summary>
+        /// <param name="deviceId">The device identifier.</param>
+        /// <param name="platform">The platform.</param>
         public void SetDeviceNameAndPlatform(string deviceId, string platform)
         {
             DeviceId = deviceId;
@@ -40,6 +71,18 @@ namespace VidMePortable
 
         #region Auth Methods
 
+        /// <summary>
+        /// Authenticates the.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// username;username cannot be null or empty
+        /// or
+        /// password;password cannot be null or empty
+        /// </exception>
         [Obsolete("This method will work, but the oauth way is preferred")]
         public async Task<AuthResponse> AuthenticateAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken))
         {
@@ -68,6 +111,12 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Checks the authentication token.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="VidMeException">No AuthenticationInfo set</exception>
         public async Task<AuthResponse> CheckAuthTokenAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             if (AuthenticationInfo == null)
@@ -86,6 +135,12 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Deletes the authentication token.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="VidMeException">No AuthenticationInfo set</exception>
         public async Task<bool> DeleteAuthTokenAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             if (AuthenticationInfo == null)
@@ -99,6 +154,19 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        /// <summary>
+        /// Gets the authentication URL.
+        /// </summary>
+        /// <param name="clientId">The client identifier.</param>
+        /// <param name="redirectUrl">The redirect URL.</param>
+        /// <param name="scopes">The scopes.</param>
+        /// <param name="type">The type.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// clientId;Client ID cannot be null or empty
+        /// or
+        /// scopes;Scopes must be provided
+        /// </exception>
         public string GetAuthUrl(string clientId, string redirectUrl, List<Scope> scopes, AuthType type = AuthType.Code)
         {
             if (string.IsNullOrEmpty(clientId))
@@ -116,6 +184,21 @@ namespace VidMePortable
             return string.Format("https://vid.me/oauth/authorize?client_id={0}&redirect_uri={1}&scope={2}&response_type={3}", clientId, redirectUrl, scopesString, type.ToString().ToLower());
         }
 
+        /// <summary>
+        /// Exchanges the code for token.
+        /// </summary>
+        /// <param name="code">The code.</param>
+        /// <param name="clientId">The client identifier.</param>
+        /// <param name="clientSecret">The client secret.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// code;code cannot be null or empty
+        /// or
+        /// clientId;Client ID cannot be null or empty
+        /// or
+        /// clientSecret;Client Secret cannot be null or empty
+        /// </exception>
         public async Task<AuthResponse> ExchangeCodeForTokenAsync(string code, string clientId, string clientSecret, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(code))
@@ -151,6 +234,10 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Sets the authentication.
+        /// </summary>
+        /// <param name="authenticationInfo">The authentication information.</param>
         public void SetAuthentication(Auth authenticationInfo)
         {
             AuthenticationInfo = authenticationInfo;
@@ -160,6 +247,13 @@ namespace VidMePortable
 
         #region Channel Methods
 
+        /// <summary>
+        /// Gets the channel.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">channelId;Channel ID cannot be null or empty</exception>
         public async Task<Channel> GetChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(channelId))
@@ -174,6 +268,13 @@ namespace VidMePortable
             return response != null ? response.Channel : null;
         }
 
+        /// <summary>
+        /// Follows the channel.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">channelId;Channel ID cannot be null or empty</exception>
         public async Task<bool> FollowChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(channelId))
@@ -189,6 +290,15 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        /// <summary>
+        /// Gets the channels hot videos.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">channelId;Channel ID cannot be null or empty</exception>
         public async Task<VideosResponse> GetChannelsHotVideosAsync(string channelId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(channelId))
@@ -205,6 +315,15 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Gets the channels new videos.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">channelId;Channel ID cannot be null or empty</exception>
         public async Task<VideosResponse> GetChannelsNewVideosAsync(string channelId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(channelId))
@@ -221,11 +340,23 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Gets the channel URL.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <returns></returns>
         public string GetChannelUrl(string channelId)
         {
             return CreateUrl(string.Format("channel/{0}/url", channelId));
         }
 
+        /// <summary>
+        /// Uns the follow channel.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">channelId;Channel ID cannot be null or empty</exception>
         public async Task<bool> UnFollowChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(channelId))
@@ -241,6 +372,11 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        /// <summary>
+        /// Lists the channels.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
         public async Task<List<Channel>> ListChannelsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var response = await Get<ChannelsResponse>("channels", cancellationToken: cancellationToken);
@@ -252,6 +388,13 @@ namespace VidMePortable
             return new List<Channel>();
         }
 
+        /// <summary>
+        /// Lists the suggested channels.
+        /// </summary>
+        /// <param name="text">The text.</param>
+        /// <param name="number">The number.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
         public async Task<List<Channel>> ListSuggestedChannelsAsync(string text = null, int? number = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var options = new Dictionary<string, string>();
@@ -271,6 +414,20 @@ namespace VidMePortable
 
         #region Comment Methods
 
+        /// <summary>
+        /// Creates the comment.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="commentText">The comment text.</param>
+        /// <param name="timeOfComment">The time of comment.</param>
+        /// <param name="inReplyToCommentId">The in reply to comment identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// videoId;Video ID cannot be null or empty
+        /// or
+        /// commentText;Empty comments are not allowed
+        /// </exception>
         public async Task<Comment> CreateCommentAsync(string videoId, string commentText, TimeSpan timeOfComment, string inReplyToCommentId = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoId))
@@ -299,6 +456,13 @@ namespace VidMePortable
             return response != null ? response.Comment : null;
         }
 
+        /// <summary>
+        /// Deletes the comment.
+        /// </summary>
+        /// <param name="commentId">The comment identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">commentId;Comment ID cannot be null or empty</exception>
         public async Task<bool> DeleteCommentAsync(string commentId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(commentId))
@@ -313,6 +477,13 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        /// <summary>
+        /// Gets the comment.
+        /// </summary>
+        /// <param name="commentId">The comment identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">commentId;Comment ID cannot be null or empty</exception>
         public async Task<Comment> GetCommentAsync(string commentId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(commentId))
@@ -326,6 +497,14 @@ namespace VidMePortable
             return response != null ? response.Comment : null;
         }
 
+        /// <summary>
+        /// Gets the comments.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="sortDirection">The sort direction.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
         public async Task<List<Comment>> GetCommentsAsync(string videoId, SortDirection? sortDirection, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoId))
@@ -347,6 +526,12 @@ namespace VidMePortable
             return new List<Comment>();
         }
 
+        /// <summary>
+        /// Gets the comment URL.
+        /// </summary>
+        /// <param name="commentId">The comment identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">commentId;Comment ID cannot be null or empty</exception>
         public string GetCommentUrl(string commentId)
         {
             if (string.IsNullOrEmpty(commentId))
@@ -357,6 +542,14 @@ namespace VidMePortable
             return CreateUrl(string.Format("comment/{0}/url", commentId));
         }
 
+        /// <summary>
+        /// Votes the comment.
+        /// </summary>
+        /// <param name="commentId">The comment identifier.</param>
+        /// <param name="vote">The vote.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">commentId;Comment ID cannot be null or empty</exception>
         public async Task<Comment> VoteCommentAsync(string commentId, Vote vote, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(commentId))
@@ -378,6 +571,11 @@ namespace VidMePortable
 
         #region GeoFences Methods
 
+        /// <summary>
+        /// Gets the geo fences.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
         public async Task<List<Geofence>> GetGeoFencesAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var response = await Get<GeoFencesResponse>("geofences", cancellationToken: cancellationToken);
@@ -389,6 +587,12 @@ namespace VidMePortable
             return new List<Geofence>();
         }
 
+        /// <summary>
+        /// Suggests the geo fences.
+        /// </summary>
+        /// <param name="searchText">The search text.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
         public async Task<List<Geofence>> SuggestGeoFencesAsync(string searchText = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var options = new Dictionary<string, string>();
@@ -407,6 +611,15 @@ namespace VidMePortable
 
         #region Grab Methods
 
+        /// <summary>
+        /// Grabs the external video.
+        /// </summary>
+        /// <param name="externalUrl">The external URL.</param>
+        /// <param name="title">The title.</param>
+        /// <param name="description">The description.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">externalUrl;External URL cannot be null or empty</exception>
         public async Task<Video> GrabExternalVideoAsync(string externalUrl, string title = null, string description = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(externalUrl))
@@ -423,6 +636,13 @@ namespace VidMePortable
             return response != null ? response.Video : null;
         }
 
+        /// <summary>
+        /// Grabs the external video information.
+        /// </summary>
+        /// <param name="externalUrl">The external URL.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">externalUrl;External URL cannot be null or empty</exception>
         public async Task<VideoInfoResponse> GrabExternalVideoInfoAsync(string externalUrl, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(externalUrl))
@@ -441,6 +661,11 @@ namespace VidMePortable
 
         #region Notifications Methods
 
+        /// <summary>
+        /// Gets the notifications.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
         public async Task<List<Notification>> GetNotificationsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var postData = CreatePostData();
@@ -454,6 +679,13 @@ namespace VidMePortable
             return new List<Notification>();
         }
 
+        /// <summary>
+        /// Marks the notifications as read.
+        /// </summary>
+        /// <param name="notificationIds">The notification ids.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">notificationIds;You must provide a list of notification IDs</exception>
         public async Task<bool> MarkNotificationsAsReadAsync(List<string> notificationIds, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (notificationIds.IsNullOrEmpty())
@@ -468,6 +700,11 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        /// <summary>
+        /// Marks all notifications as read.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
         public async Task<bool> MarkAllNotificationsAsReadAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             var postData = CreatePostData();
@@ -481,6 +718,12 @@ namespace VidMePortable
 
         #region Tags Methods
 
+        /// <summary>
+        /// Suggesteds the tags.
+        /// </summary>
+        /// <param name="searchText">The search text.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
         public async Task<List<Tag>> SuggestedTagsAsync(string searchText = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var postData = CreatePostData(false);
@@ -499,6 +742,12 @@ namespace VidMePortable
 
         #region User Methods
 
+        /// <summary>
+        /// Gets the user avatar.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
         public string GetUserAvatar(string userId)
         {
             if (string.IsNullOrEmpty(userId))
@@ -511,6 +760,19 @@ namespace VidMePortable
             return CreateUrl(method);
         }
 
+        /// <summary>
+        /// Creates the user.
+        /// </summary>
+        /// <param name="username">The username.</param>
+        /// <param name="password">The password.</param>
+        /// <param name="email">The email.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// username;username cannot be null or empty
+        /// or
+        /// password;password cannot be null or empty
+        /// </exception>
         public async Task<AuthResponse> CreateUserAsync(string username, string password, string email = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(username))
@@ -540,6 +802,13 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Gets the user.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User Id cannot be null or empty</exception>
         public async Task<User> GetUserAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
@@ -553,6 +822,17 @@ namespace VidMePortable
             return response != null ? response.User : null;
         }
 
+        /// <summary>
+        /// Edits the user.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="username">The username.</param>
+        /// <param name="currentPassword">The current password.</param>
+        /// <param name="newPassword">The new password.</param>
+        /// <param name="email">The email.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User Id cannot be null or empty</exception>
         public async Task<AuthResponse> EditUserAsync(string userId, string username = null, string currentPassword = null, string newPassword = null, string email = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
@@ -579,6 +859,13 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Follows the user.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
         public async Task<bool> FollowUserAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
@@ -595,6 +882,13 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        /// <summary>
+        /// Gets the users followed channels.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
         public async Task<List<Channel>> GetUsersFollowedChannelsAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
@@ -615,6 +909,13 @@ namespace VidMePortable
             return new List<Channel>();
         }
 
+        /// <summary>
+        /// Removes the avatar.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
         public async Task<bool> RemoveAvatarAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
@@ -630,6 +931,13 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        /// <summary>
+        /// Unfollows the user.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
         public async Task<bool> UnfollowUserAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
@@ -645,6 +953,14 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        /// <summary>
+        /// Updates the avatar.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="imageStream">The image stream.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
         public async Task<User> UpdateAvatarAsync(string userId, Stream imageStream, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
@@ -659,6 +975,14 @@ namespace VidMePortable
             }
         }
 
+        /// <summary>
+        /// Updates the avatar.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="imageStream">The image stream.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
         public async Task<User> UpdateAvatarAsync(string userId, byte[] imageStream, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
@@ -677,6 +1001,12 @@ namespace VidMePortable
             return response != null ? response.User : null;
         }
 
+        /// <summary>
+        /// Suggesteds the users.
+        /// </summary>
+        /// <param name="searchText">The search text.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
         public async Task<List<UserTag>> SuggestedUsersAsync(string searchText = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var postData = CreatePostData(false);
@@ -691,6 +1021,15 @@ namespace VidMePortable
             return new List<UserTag>();
         }
 
+        /// <summary>
+        /// Gets the user videos.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
         public async Task<VideosResponse> GetUserVideosAsync(string userId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
@@ -707,7 +1046,14 @@ namespace VidMePortable
             return response;
         }
 
-        public async Task<VideosResponse> GetAnonymouseVideosAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
+        /// <summary>
+        /// Gets the anonymous videos.
+        /// </summary>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<VideosResponse> GetAnonymousVideosAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var options = CreatePostData(false);
             options.AddIfNotNull("offset", offset);
@@ -721,6 +1067,14 @@ namespace VidMePortable
 
         #region Video Methods
 
+        /// <summary>
+        /// Deletes the video.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="deletionToken">The deletion token.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
         public async Task<bool> DeleteVideoAsync(string videoId, string deletionToken = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoId))
@@ -736,6 +1090,13 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        /// <summary>
+        /// Gets the video.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
         public async Task<Video> GetVideoAsync(string videoId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoId))
@@ -750,6 +1111,14 @@ namespace VidMePortable
             return response != null ? response.Video : null;
         }
 
+        /// <summary>
+        /// Edits the video.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
         public async Task<Video> EditVideoAsync(string videoId, VideoRequest request = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoId))
@@ -777,6 +1146,14 @@ namespace VidMePortable
             return response != null ? response.Video : null;
         }
 
+        /// <summary>
+        /// Flags the video.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="isFlagged">if set to <c>true</c> [is flagged].</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
         public async Task<Video> FlagVideoAsync(string videoId, bool isFlagged, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoId))
@@ -793,6 +1170,12 @@ namespace VidMePortable
             return response != null ? response.Video : null;
         }
 
+        /// <summary>
+        /// Requests the video.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
         public async Task<VideoRequestResponse> RequestVideoAsync(VideoRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             var postData = CreatePostData(false);
@@ -813,11 +1196,29 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Gets the video thumbnail.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <returns></returns>
         public string GetVideoThumbnail(string videoId)
         {
             return CreateUrl(string.Format("video/{0}/thumbnail", videoId));
         }
 
+        /// <summary>
+        /// Updates the video title.
+        /// </summary>
+        /// <param name="videoCode">The video code.</param>
+        /// <param name="title">The title.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// videoCode;A video code must be provided
+        /// or
+        /// title;Title cannot be null or empty
+        /// </exception>
+        /// <exception cref="System.InvalidOperationException">You must have set a device id</exception>
         public async Task<bool> UpdateVideoTitleAsync(string videoCode, string title, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoCode))
@@ -843,6 +1244,18 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        /// <summary>
+        /// Uploads the video.
+        /// </summary>
+        /// <param name="videoCode">The video code.</param>
+        /// <param name="videoStream">The video stream.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// videoCode;A valid video code must be used from the RequestVideo method.
+        /// or
+        /// videoStream;Invalid video stream passed through
+        /// </exception>
         public async Task<VideoUploadResponse> UploadVideoAsync(string videoCode, Stream videoStream, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoCode))
@@ -863,6 +1276,14 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Uploads the video.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="videoStream">The video stream.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">videoStream;Invalid video stream passed through</exception>
         public async Task<VideoUploadResponse> UploadVideoAsync(VideoRequest request, Stream videoStream, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (videoStream == null || videoStream.Length == 0)
@@ -895,16 +1316,14 @@ namespace VidMePortable
         #region Search Methods
 
         /// <summary>
-        /// Locations the search asynchronous.
+        /// Locations the search.
         /// </summary>
         /// <param name="request">The request.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        /// <exception cref="System.InvalidOperationException">
-        /// You must supply a valid request
+        /// <exception cref="System.InvalidOperationException">You must supply a valid request
         /// or
-        /// You must supply either long/lat or a geofence ID
-        /// </exception>
+        /// You must supply either long/lat or a geofence ID</exception>
         public async Task<VideosResponse> LocationSearchAsync(LocationRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (request == null)
@@ -939,6 +1358,13 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Searches the videos.
+        /// </summary>
+        /// <param name="searchText">The search text.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">searchText;Search text cannot be null or empty</exception>
         public async Task<VideosResponse> SearchVideosAsync(string searchText, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(searchText))
