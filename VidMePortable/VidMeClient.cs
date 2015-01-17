@@ -691,6 +691,32 @@ namespace VidMePortable
             return new List<UserTag>();
         }
 
+        public async Task<VideosResponse> GetUserVideosAsync(string userId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "User ID cannot be null or empty");
+            }
+
+            var options = CreatePostData(false);
+            options.AddIfNotNull("user", userId);
+            options.AddIfNotNull("offset", offset);
+            options.AddIfNotNull("limit", limit);
+
+            var response = await Post<VideosResponse>(options, "videos/list", cancellationToken);
+            return response;
+        }
+
+        public async Task<VideosResponse> GetAnonymouseVideosAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var options = CreatePostData(false);
+            options.AddIfNotNull("offset", offset);
+            options.AddIfNotNull("limit", limit);
+
+            var response = await Post<VideosResponse>(options, "videos/list", cancellationToken);
+            return response;
+        }
+
         #endregion
 
         #region Video Methods

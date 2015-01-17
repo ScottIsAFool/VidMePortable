@@ -56,6 +56,8 @@ namespace VidMePortable
         Task<User> UpdateAvatarAsync(string userId, Stream imageStream, CancellationToken cancellationToken = default(CancellationToken));
         Task<User> UpdateAvatarAsync(string userId, byte[] imageStream, CancellationToken cancellationToken = default(CancellationToken));
         Task<List<UserTag>> SuggestedUsersAsync(string searchText = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<VideosResponse> GetUserVideosAsync(string userId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<VideosResponse> GetAnonymouseVideosAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
         Task<bool> DeleteVideoAsync(string videoId, string deletionToken = null, CancellationToken cancellationToken = default(CancellationToken));
         Task<Video> GetVideoAsync(string videoId, CancellationToken cancellationToken = default(CancellationToken));
         Task<Video> EditVideoAsync(string videoId, VideoRequest request = null, CancellationToken cancellationToken = default(CancellationToken));
