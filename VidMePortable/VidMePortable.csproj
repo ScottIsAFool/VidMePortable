@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Attributes\DescriptionAttribute.cs" />
     <Compile Include="Converters\DateTimeConverter.cs" />
+    <Compile Include="Converters\ListConverters.cs" />
     <Compile Include="Extensions\AttributeExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />
     <Compile Include="Extensions\ListExtensions.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Model\User.cs" />
     <Compile Include="Model\VideoSource.cs" />
     <Compile Include="Model\VidMeException.cs" />
+    <Compile Include="Model\ViewerVote.cs" />
     <Compile Include="Model\Vote.cs" />
     <Compile Include="VidMeClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
+using VidMePortable.Converters;
 
 namespace VidMePortable.Model.Responses
 {
@@ -18,6 +19,7 @@ namespace VidMePortable.Model.Responses
         //public object[] Watching { get; set; }
 
         [JsonProperty("viewerVotes")]
-        public object[] ViewerVotes { get; set; }
+        [JsonConverter(typeof(ObjectToArrayConverter<ViewerVote>))]
+        public List<ViewerVote> ViewerVotes { get; set; }
     }
 }
