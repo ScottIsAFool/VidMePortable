@@ -447,11 +447,19 @@ namespace VidMePortable
         /// Deletes the video.
         /// </summary>
         /// <param name="videoId">The video identifier.</param>
-        /// <param name="deletionToken">The deletion token.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
-        Task<bool> DeleteVideoAsync(string videoId, string deletionToken = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<bool> DeleteVideoAsync(string videoId, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Deletes the anonymous video.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="deletionToken">The deletion token.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<bool> DeleteAnonymousVideoAsync(string videoId, string deletionToken, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the video.

@@ -1081,15 +1081,51 @@ namespace VidMePortable
         /// Deletes the video.
         /// </summary>
         /// <param name="videoId">The video identifier.</param>
-        /// <param name="deletionToken">The deletion token.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
-        public async Task<bool> DeleteVideoAsync(string videoId, string deletionToken = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<bool> DeleteVideoAsync(string videoId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoId))
             {
                 throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
+            }
+
+            var postData = CreatePostData(true);
+
+            var method = string.Format("video/{0}/delete", videoId);
+            var response = await Post<Response>(postData, method, cancellationToken);
+            return response != null && response.Status;
+        }
+
+        /// <summary>
+        /// Deletes the anonymous video.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="deletionToken">The deletion token.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// videoId;Video ID cannot be null or empty
+        /// or
+        /// deletionToken;Deletion token cannot be null or empty
+        /// </exception>
+        /// <exception cref="System.InvalidOperationException">No Device ID was set</exception>
+        public async Task<bool> DeleteAnonymousVideoAsync(string videoId, string deletionToken, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(videoId))
+            {
+                throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
+            }
+
+            if (string.IsNullOrEmpty(deletionToken))
+            {
+                throw new ArgumentNullException("deletionToken", "Deletion token cannot be null or empty");
+            }
+
+            if (string.IsNullOrEmpty(DeviceId))
+            {
+                throw new InvalidOperationException("No Device ID was set");
             }
 
             var postData = CreatePostData(false);
