@@ -1040,7 +1040,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("userId", "User ID cannot be null or empty");
             }
 
-            var options = CreatePostData(false);
+            var options = CreatePostData(true, false);
             options.AddIfNotNull("user", userId);
             options.AddIfNotNull("offset", offset);
             options.AddIfNotNull("limit", limit);
@@ -1504,7 +1504,7 @@ namespace VidMePortable
             return string.Format("{0}{1}?{2}", BaseUrl, method, options);
         }
 
-        private Dictionary<string, string> CreatePostData(bool tokenRequred = true)
+        private Dictionary<string, string> CreatePostData(bool tokenRequred = true, bool includeDevice = true)
         {
             var postData = new Dictionary<string, string>();
             if (tokenRequred)
@@ -1516,7 +1516,12 @@ namespace VidMePortable
             {
                 postData.Add("token", AuthenticationInfo.Token);
             }
-            postData.AddIfNotNull("DEVICE".ToLower(), DeviceId);
+
+            if (includeDevice)
+            {
+                postData.AddIfNotNull("DEVICE".ToLower(), DeviceId);
+            }
+
             postData.AddIfNotNull("device_PLATFORM".ToLower(), Platform);
 
             return postData;
