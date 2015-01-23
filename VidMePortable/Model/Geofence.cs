@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using Newtonsoft.Json;
 using PropertyChanged;
 using VidMePortable.Converters;
 
 namespace VidMePortable.Model
 {
+    [DebuggerDisplay("Title: {Title}, Id: {GeofenceId}")]
     [ImplementPropertyChanged]
     public class Geofence
     {

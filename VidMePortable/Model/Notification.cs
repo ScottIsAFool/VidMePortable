@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using Newtonsoft.Json;
 using PropertyChanged;
 using VidMePortable.Converters;
 
 namespace VidMePortable.Model
 {
+    [DebuggerDisplay("Text: {Text}, Id: {NotificationId}")]
     [ImplementPropertyChanged]
     public class Notification
     {

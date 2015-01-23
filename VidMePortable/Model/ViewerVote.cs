@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using Newtonsoft.Json;
 using PropertyChanged;
 using VidMePortable.Converters;
 
 namespace VidMePortable.Model
 {
+    [DebuggerDisplay("Value: {Value}, Id: {VoteId}")]
     [ImplementPropertyChanged]
     public class ViewerVote
     {

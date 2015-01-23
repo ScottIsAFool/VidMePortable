@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics;
+using Newtonsoft.Json;
 using PropertyChanged;
 
 namespace VidMePortable.Model
 {
+    [DebuggerDisplay("Text: {Text}, Id: {TagId}")]
     [ImplementPropertyChanged]
     public class Tag
     {

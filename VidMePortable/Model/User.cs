@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Diagnostics;
+using Newtonsoft.Json;
 using PropertyChanged;
 
 namespace VidMePortable.Model
 {
+    [DebuggerDisplay("Username: {Username}, Id: {UserId}")]
     [ImplementPropertyChanged]
     public class User
     {

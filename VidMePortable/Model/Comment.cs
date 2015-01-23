@@ -1,8 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using System.Diagnostics;
+using Newtonsoft.Json;
 using PropertyChanged;
+using VidMePortable.Converters;
 
 namespace VidMePortable.Model
 {
+    [DebuggerDisplay("Body: {Body}, Id: {CommentId}")]
     [ImplementPropertyChanged]
     public class Comment
     {
@@ -16,16 +20,18 @@ namespace VidMePortable.Model
         public string UserId { get; set; }
 
         [JsonProperty("parent_comment_id")]
-        public object ParentCommentId { get; set; }
+        public string ParentCommentId { get; set; }
 
         [JsonProperty("body")]
         public string Body { get; set; }
 
         [JsonProperty("date_created")]
-        public string DateCreated { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
+        public DateTime? DateCreated { get; set; }
 
         [JsonProperty("made_at_time")]
-        public object MadeAtTime { get; set; }
+        [JsonConverter(typeof(DateTimeConverter))]
+        public DateTime? MadeAtTime { get; set; }
 
         [JsonProperty("score")]
         public int Score { get; set; }
