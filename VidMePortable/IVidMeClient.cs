@@ -4,6 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using VidMePortable.Model;
+using VidMePortable.Model.Requests;
 using VidMePortable.Model.Responses;
 
 namespace VidMePortable
@@ -311,6 +312,44 @@ namespace VidMePortable
         Task<List<Tag>> SuggestedTagsAsync(string searchText = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Gets the authorised apps.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<List<Application>> GetAuthorisedAppsAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Gets the owned apps.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<List<Application>> GetOwnedAppsAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Registers the application.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// app;You must provide some app details
+        /// or
+        /// app.name;You must provide a name for the app
+        /// or
+        /// app.redirecturl;You must provide a redirect url
+        /// </exception>
+        Task<CreateAppResponse> RegisterAppAsync(AppRequest app, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Revokes the application token.
+        /// </summary>
+        /// <param name="clientId">The client identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">clientId;A Client ID must be provided</exception>
+        Task<bool> RevokeAppTokenAsync(string clientId, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Gets the user avatar.
         /// </summary>
         /// <param name="userId">The user identifier.</param>
@@ -396,9 +435,9 @@ namespace VidMePortable
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <param name="imageStream">The image stream.</param>
-        /// <param name="contentType"></param>
         /// <param name="filename"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
+        /// <param name="contentType"></param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
         Task<User> UpdateAvatarAsync(string userId, Stream imageStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken));
@@ -459,6 +498,12 @@ namespace VidMePortable
         /// <param name="deletionToken">The deletion token.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// videoId;Video ID cannot be null or empty
+        /// or
+        /// deletionToken;Deletion token cannot be null or empty
+        /// </exception>
+        /// <exception cref="System.InvalidOperationException">No Device ID was set</exception>
         Task<bool> DeleteAnonymousVideoAsync(string videoId, string deletionToken, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -489,6 +534,11 @@ namespace VidMePortable
         /// <param name="filename">The filename.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// videoId;Video ID cannot be null or empty
+        /// or
+        /// thumbnailStream;Must provide a valid image
+        /// </exception>
         Task<Video> UpdateVideoThumbnailAsync(string videoId, Stream thumbnailStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>

@@ -1,6 +1,6 @@
 ﻿using VidMePortable.Attributes;
 
-namespace VidMePortable.Model.Responses
+namespace VidMePortable.Model
 {
     public enum LocationOrderBy
     {

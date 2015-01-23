@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using VidMePortable.Extensions;
 using VidMePortable.Model;
+using VidMePortable.Model.Requests;
 using VidMePortable.Model.Responses;
 
 namespace VidMePortable
@@ -737,6 +738,111 @@ namespace VidMePortable
             }
 
             return new List<Tag>();
+        }
+
+        #endregion
+
+        #region App/Client Methods
+
+        /// <summary>
+        /// Gets the authorised apps.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<List<Application>> GetAuthorisedAppsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var postData = CreatePostData();
+
+            var response = await Post<AppsResponse>(postData, "oauth/apps", cancellationToken);
+
+            if (response != null)
+            {
+                return response.Applications ?? new List<Application>();
+            }
+
+            return new List<Application>();
+        }
+
+        /// <summary>
+        /// Gets the owned apps.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<List<Application>> GetOwnedAppsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var postData = CreatePostData();
+
+            var response = await Post<AppsResponse>(postData, "oauth/clients", cancellationToken);
+
+            if (response != null)
+            {
+                return response.Applications ?? new List<Application>();
+            }
+
+            return new List<Application>();
+        }
+
+        /// <summary>
+        /// Registers the application.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// app;You must provide some app details
+        /// or
+        /// app.name;You must provide a name for the app
+        /// or
+        /// app.redirecturl;You must provide a redirect url
+        /// </exception>
+        public async Task<CreateAppResponse> RegisterAppAsync(AppRequest app, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (app == null)
+            {
+                throw new ArgumentNullException("app", "You must provide some app details");
+            }
+
+            if (string.IsNullOrEmpty(app.Name))
+            {
+                throw new ArgumentNullException("app.name", "You must provide a name for the app");
+            }
+
+            if (string.IsNullOrEmpty(app.RedirectUri))
+            {
+                throw new ArgumentNullException("app.redirecturl", "You must provide a redirect url");
+            }
+
+            var postData = CreatePostData();
+            postData.AddIfNotNull("name", app.Name);
+            postData.AddIfNotNull("website", app.Website);
+            postData.AddIfNotNull("description", app.Description);
+            postData.AddIfNotNull("organization", app.Organisation);
+            postData.AddIfNotNull("accept_terms", "yes");
+            postData.AddIfNotNull("redirect_uri_prefix", app.RedirectUri);
+
+            var response = await Post<CreateAppResponse>(postData, "oauth/register", cancellationToken);
+            return response;
+        }
+
+        /// <summary>
+        /// Revokes the application token.
+        /// </summary>
+        /// <param name="clientId">The client identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">clientId;A Client ID must be provided</exception>
+        public async Task<bool> RevokeAppTokenAsync(string clientId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(clientId))
+            {
+                throw new ArgumentNullException("clientId", "A Client ID must be provided");
+            }
+
+            var postData = CreatePostData();
+            postData.AddIfNotNull("client_id", clientId);
+
+            var response = await Post<Response>(postData, "oauth/revoke", cancellationToken);
+            return response != null && response.Status;
         }
 
         #endregion

@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using PropertyChanged;
 
-namespace VidMePortable.Model.Responses
+namespace VidMePortable.Model.Requests
 {
     [ImplementPropertyChanged]
     public class VideoRequest

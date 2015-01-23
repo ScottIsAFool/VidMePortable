@@ -1,6 +1,6 @@
 ﻿using PropertyChanged;
 
-namespace VidMePortable.Model.Responses
+namespace VidMePortable.Model.Requests
 {
     [ImplementPropertyChanged]
     public class LocationRequest

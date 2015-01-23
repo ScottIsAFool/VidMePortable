@@ -53,6 +53,9 @@
     <Compile Include="IVidMeClient.cs" />
     <Compile Include="Model\AuthResponseType.cs" />
     <Compile Include="Model\AuthType.cs" />
+    <Compile Include="Model\Application.cs" />
+    <Compile Include="Model\Requests\AppRequest.cs" />
+    <Compile Include="Model\Responses\AppsResponse.cs" />
     <Compile Include="Model\Responses\ChannelResponse.cs" />
     <Compile Include="Model\Page.cs" />
     <Compile Include="Model\Parameters.cs" />
@@ -61,10 +64,11 @@
     <Compile Include="Model\Responses\CommentsResponse.cs" />
     <Compile Include="Model\Geofence.cs" />
     <Compile Include="Model\Data.cs" />
+    <Compile Include="Model\Responses\CreateAppResponse.cs" />
     <Compile Include="Model\Responses\GeoFencesResponse.cs" />
     <Compile Include="Model\Notification.cs" />
-    <Compile Include="Model\Responses\LocationOrderBy.cs" />
-    <Compile Include="Model\Responses\LocationRequest.cs" />
+    <Compile Include="Model\LocationOrderBy.cs" />
+    <Compile Include="Model\Requests\LocationRequest.cs" />
     <Compile Include="Model\Responses\NotificationsResponse.cs" />
     <Compile Include="Model\Responses\Response.cs" />
     <Compile Include="Model\Auth.cs" />
@@ -72,7 +76,7 @@
     <Compile Include="Model\Channel.cs" />
     <Compile Include="Model\Responses\ChannelsResponse.cs" />
     <Compile Include="Model\Responses\ErrorResponse.cs" />
-    <Compile Include="Model\Responses\VideoRequest.cs" />
+    <Compile Include="Model\Requests\VideoRequest.cs" />
     <Compile Include="Model\Responses\VideoRequestResponse.cs" />
     <Compile Include="Model\Responses\VideoUploadResponse.cs" />
     <Compile Include="Model\UserTag.cs" />
