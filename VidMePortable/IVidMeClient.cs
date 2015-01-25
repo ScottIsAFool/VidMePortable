@@ -489,7 +489,7 @@ namespace VidMePortable
         /// <param name="limit">The limit.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<List<Video>> GetUserFeedAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<VideosResponse> GetUserFeedAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Deletes the video.
