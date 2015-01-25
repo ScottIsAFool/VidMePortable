@@ -14,6 +14,9 @@ namespace VidMePortable.Model
         [JsonProperty("username")]
         public string Username { get; set; }
 
+        [JsonProperty("full_url")]
+        public string FullUrl { get; set; }
+
         [JsonProperty("avatar")]
         public string Avatar { get; set; }
 
@@ -26,10 +29,22 @@ namespace VidMePortable.Model
         [JsonProperty("cover_url")]
         public string CoverUrl { get; set; }
 
-        [JsonProperty("video_views")]
-        public string VideoViews { get; set; }
+        [JsonProperty("follower_count")]
+        public int FollowerCount { get; set; }
 
         [JsonProperty("likes_count")]
         public string LikesCount { get; set; }
+
+        [JsonProperty("video_count")]
+        public int VideoCount { get; set; }
+
+        [JsonProperty("video_views")]
+        public string VideoViews { get; set; }
+
+        [JsonProperty("videos_scores")]
+        public int VideosScores { get; set; }
+
+        [JsonProperty("bio")]
+        public string Bio { get; set; }
     }
 }
