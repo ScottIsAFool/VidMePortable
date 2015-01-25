@@ -123,7 +123,7 @@ namespace VidMePortable
         {
             if (AuthenticationInfo == null)
             {
-                throw new VidMeException(HttpStatusCode.Unauthorized, "No AuthenticationInfo set");
+                throw new VidMeException(HttpStatusCode.Unauthorized, new ErrorResponse { Error = "No AuthenticationInfo set" });
             }
 
             var postData = CreatePostData();
@@ -147,7 +147,7 @@ namespace VidMePortable
         {
             if (AuthenticationInfo == null)
             {
-                throw new VidMeException(HttpStatusCode.Unauthorized, "No AuthenticationInfo set");
+                throw new VidMeException(HttpStatusCode.Unauthorized, new ErrorResponse { Error = "No AuthenticationInfo set" });
             }
 
             var postData = CreatePostData();
@@ -517,7 +517,7 @@ namespace VidMePortable
             var options = new Dictionary<string, string>();
             options.AddIfNotNull("video", videoId);
             options.AddIfNotNull("direction", sortDirection.GetDescription());
-            
+
             var response = await Get<CommentsResponse>("comments/list", options.ToQueryString(), cancellationToken);
 
             if (response != null)
@@ -946,7 +946,7 @@ namespace VidMePortable
             {
                 throw new ArgumentNullException("userId", "User Id cannot be null or empty");
             }
-            
+
             var postData = CreatePostData();
 
             postData.AddIfNotNull("username", username);
@@ -1379,7 +1379,7 @@ namespace VidMePortable
                 postData.AddIfNotNull("place_name", request.FourSquarePlaceName);
                 postData.AddIfNotNull("private", request.IsPrivate);
             }
-            
+
             var response = await Post<VideoRequestResponse>(postData, "video/request", cancellationToken);
             return response;
         }
@@ -1628,7 +1628,7 @@ namespace VidMePortable
             }
 
             var error = JsonConvert.DeserializeObject<ErrorResponse>(responseString);
-            throw new VidMeException(response.StatusCode, error.Error);
+            throw new VidMeException(response.StatusCode, error);
         }
         #endregion
 
@@ -1637,7 +1637,7 @@ namespace VidMePortable
             var now = DateTime.Now;
             if (AuthenticationInfo == null || AuthenticationInfo.Expires < now)
             {
-                throw new VidMeException(HttpStatusCode.Unauthorized, "No valid AuthenticationInfo set");
+                throw new VidMeException(HttpStatusCode.Unauthorized, new ErrorResponse { Error = "No valid AuthenticationInfo set" });
             }
         }
 
@@ -1654,7 +1654,7 @@ namespace VidMePortable
                 CheckExpirationDateIsOk();
             }
 
-            if(AuthenticationInfo != null)
+            if (AuthenticationInfo != null)
             {
                 postData.Add("token", AuthenticationInfo.Token);
             }
