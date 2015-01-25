@@ -1146,7 +1146,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("userId", "User ID cannot be null or empty");
             }
 
-            var options = CreatePostData(true, false);
+            var options = CreatePostData(false, false);
             options.AddIfNotNull("user", userId);
             options.AddIfNotNull("offset", offset);
             options.AddIfNotNull("limit", limit);
