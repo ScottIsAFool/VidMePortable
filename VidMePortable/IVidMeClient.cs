@@ -483,6 +483,15 @@ namespace VidMePortable
         Task<VideosResponse> GetAnonymousVideosAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Gets the user feed.
+        /// </summary>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<List<Video>> GetUserFeedAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Deletes the video.
         /// </summary>
         /// <param name="videoId">The video identifier.</param>

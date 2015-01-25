@@ -1179,6 +1179,28 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Gets the user feed.
+        /// </summary>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<List<Video>> GetUserFeedAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var postData = CreatePostData();
+            postData.AddIfNotNull("offset", offset);
+            postData.AddIfNotNull("limit", limit);
+
+            var response = await Post<VideosResponse>(postData, "videos/feed", cancellationToken);
+            if (response != null)
+            {
+                return response.Videos ?? new List<Video>();
+            }
+
+            return new List<Video>();
+        }
+
         #endregion
 
         #region Video Methods
