@@ -77,6 +77,7 @@
     <Compile Include="Model\Responses\ChannelsResponse.cs" />
     <Compile Include="Model\Responses\ErrorResponse.cs" />
     <Compile Include="Model\Requests\VideoRequest.cs" />
+    <Compile Include="Model\VideoFormat.cs" />
     <Compile Include="Model\Responses\VideoRequestResponse.cs" />
     <Compile Include="Model\Responses\VideoUploadResponse.cs" />
     <Compile Include="Model\UserTag.cs" />

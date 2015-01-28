@@ -524,7 +524,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
-        Task<Video> GetVideoAsync(string videoId, CancellationToken cancellationToken = default(CancellationToken));
+        Task<VideoResponse> GetVideoAsync(string videoId, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Edits the video.

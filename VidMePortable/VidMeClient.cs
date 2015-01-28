@@ -1264,7 +1264,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
-        public async Task<Video> GetVideoAsync(string videoId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<VideoResponse> GetVideoAsync(string videoId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoId))
             {
@@ -1275,7 +1275,7 @@ namespace VidMePortable
             var method = string.Format("video/{0}", videoId);
 
             var response = await Get<VideoResponse>(method, options.ToQueryString(), cancellationToken);
-            return response != null ? response.Video : null;
+            return response;
         }
 
         /// <summary>

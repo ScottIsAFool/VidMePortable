@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using PropertyChanged;
 using VidMePortable.Converters;
+using VidMePortable.Model.Responses;
 
 namespace VidMePortable.Model
 {
@@ -123,5 +125,8 @@ namespace VidMePortable.Model
 
         [JsonProperty("user")]
         public User User { get; set; }
+
+        [JsonProperty("formats")]
+        public List<VideoFormat> VideoFormats { get; set; }
     }
 }
