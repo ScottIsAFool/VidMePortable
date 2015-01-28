@@ -225,7 +225,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
-        Task<List<Comment>> GetCommentsAsync(string videoId, SortDirection? sortDirection, CancellationToken cancellationToken = default(CancellationToken));
+        Task<List<Comment>> GetCommentsAsync(string videoId, SortDirection? sortDirection = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the comment URL.
