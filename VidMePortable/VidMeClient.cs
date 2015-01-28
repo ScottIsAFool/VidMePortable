@@ -504,10 +504,12 @@ namespace VidMePortable
         /// </summary>
         /// <param name="videoId">The video identifier.</param>
         /// <param name="sortDirection">The sort direction.</param>
+        /// <param name="offset"></param>
+        /// <param name="limit"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
-        public async Task<List<Comment>> GetCommentsAsync(string videoId, SortDirection? sortDirection = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<CommentsResponse> GetCommentsAsync(string videoId, SortDirection? sortDirection = null, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoId))
             {
@@ -517,15 +519,11 @@ namespace VidMePortable
             var options = new Dictionary<string, string>();
             options.AddIfNotNull("video", videoId);
             options.AddIfNotNull("direction", sortDirection.GetDescription());
+            options.AddIfNotNull("offset", offset);
+            options.AddIfNotNull("limit", limit);
 
             var response = await Get<CommentsResponse>("comments/list", options.ToQueryString(), cancellationToken);
-
-            if (response != null)
-            {
-                return response.Comments ?? new List<Comment>();
-            }
-
-            return new List<Comment>();
+            return response;
         }
 
         /// <summary>

@@ -222,10 +222,12 @@ namespace VidMePortable
         /// </summary>
         /// <param name="videoId">The video identifier.</param>
         /// <param name="sortDirection">The sort direction.</param>
+        /// <param name="offset"></param>
+        /// <param name="limit"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">videoId;Video ID cannot be null or empty</exception>
-        Task<List<Comment>> GetCommentsAsync(string videoId, SortDirection? sortDirection = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<CommentsResponse> GetCommentsAsync(string videoId, SortDirection? sortDirection = null, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the comment URL.
