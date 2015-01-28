@@ -518,7 +518,7 @@ namespace VidMePortable
 
             var options = new Dictionary<string, string>();
             options.AddIfNotNull("video", videoId);
-            options.AddIfNotNull("direction", sortDirection.GetDescription());
+            options.AddIfNotNull("direction", sortDirection);
             options.AddIfNotNull("offset", offset);
             options.AddIfNotNull("limit", limit);
 
@@ -1134,10 +1134,11 @@ namespace VidMePortable
         /// <param name="userId">The user identifier.</param>
         /// <param name="offset">The offset.</param>
         /// <param name="limit">The limit.</param>
+        /// <param name="sortDirection"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
-        public async Task<VideosResponse> GetUserVideosAsync(string userId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<VideosResponse> GetUserVideosAsync(string userId, int? offset = null, int? limit = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
             {
@@ -1151,6 +1152,7 @@ namespace VidMePortable
             options.AddIfNotNull("moderated", "0");
             options.AddIfNotNull("state", "success");
             options.AddIfNotNull("minVideoId", "0");
+            options.AddIfNotNull("direction", sortDirection);
 
             var response = await Post<VideosResponse>(options, "videos/list", cancellationToken);
             return response;

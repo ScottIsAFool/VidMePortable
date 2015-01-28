@@ -470,10 +470,11 @@ namespace VidMePortable
         /// <param name="userId">The user identifier.</param>
         /// <param name="offset">The offset.</param>
         /// <param name="limit">The limit.</param>
+        /// <param name="sortDirection"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
-        Task<VideosResponse> GetUserVideosAsync(string userId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<VideosResponse> GetUserVideosAsync(string userId, int? offset = null, int? limit = null, SortDirection? sortDirection = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Gets the anonymous videos.
