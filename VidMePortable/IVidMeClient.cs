@@ -640,5 +640,10 @@ namespace VidMePortable
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">searchText;Search text cannot be null or empty</exception>
         Task<VideosResponse> SearchVideosAsync(string searchText, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Occurs when [authentication details updated].
+        /// </summary>
+        event EventHandler<AuthResponse> AuthDetailsUpdated;
     }
 }

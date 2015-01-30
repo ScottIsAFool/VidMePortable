@@ -126,7 +126,7 @@ namespace VidMePortable
                 throw new VidMeException(HttpStatusCode.Unauthorized, new ErrorResponse { Error = "No AuthenticationInfo set" });
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             var response = await Post<AuthResponse>(postData, "auth/check", cancellationToken);
 
             if (response != null)
@@ -150,7 +150,7 @@ namespace VidMePortable
                 throw new VidMeException(HttpStatusCode.Unauthorized, new ErrorResponse { Error = "No AuthenticationInfo set" });
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             var response = await Post<Response>(postData, "auth/delete", cancellationToken);
 
             return response != null && response.Status;
@@ -284,7 +284,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("channelId", "Channel ID cannot be null or empty");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             var method = string.Format("channel/{0}/follow", channelId);
 
             var response = await Post<Response>(postData, method, cancellationToken);
@@ -366,7 +366,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("channelId", "Channel ID cannot be null or empty");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             var method = string.Format("channel/{0}/unfollow", channelId);
 
             var response = await Post<Response>(postData, method, cancellationToken);
@@ -447,7 +447,7 @@ namespace VidMePortable
                 timeOfComment = TimeSpan.FromSeconds(0);
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             postData.AddIfNotNull("video", videoId);
             postData.AddIfNotNull("comment", inReplyToCommentId);
             postData.AddIfNotNull("body", commentText);
@@ -472,7 +472,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("commentId", "Comment ID cannot be null or empty");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             var method = string.Format("comment/{0}/delete", commentId);
 
             var response = await Post<Response>(postData, method, cancellationToken);
@@ -557,7 +557,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("commentId", "Comment ID cannot be null or empty");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             postData.AddIfNotNull("value", vote.GetDescription());
 
             var method = string.Format("comment/{0}/vote", commentId);
@@ -627,7 +627,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("externalUrl", "External URL cannot be null or empty");
             }
 
-            var postData = CreatePostData(false);
+            var postData = await CreatePostData(false);
             postData.AddIfNotNull("url", externalUrl);
             postData.AddIfNotNull("title", title);
             postData.AddIfNotNull("description", description);
@@ -668,7 +668,7 @@ namespace VidMePortable
         /// <returns></returns>
         public async Task<List<Notification>> GetNotificationsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
 
             var response = await Post<NotificationsResponse>(postData, "notifications", cancellationToken);
             if (response != null)
@@ -693,7 +693,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("notificationIds", "You must provide a list of notification IDs");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             postData.AddIfNotNull("notifications", notificationIds);
 
             var response = await Post<Response>(postData, "notifications/mark-read", cancellationToken);
@@ -707,7 +707,7 @@ namespace VidMePortable
         /// <returns></returns>
         public async Task<bool> MarkAllNotificationsAsReadAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             postData.Add("notifications", "all");
 
             var response = await Post<Response>(postData, "notifications/mark-read", cancellationToken);
@@ -726,7 +726,7 @@ namespace VidMePortable
         /// <returns></returns>
         public async Task<List<Tag>> SuggestedTagsAsync(string searchText = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var postData = CreatePostData(false);
+            var postData = await CreatePostData(false);
             postData.AddIfNotNull("text", searchText);
 
             var response = await Post<TagsResponse>(postData, "tags/suggest", cancellationToken);
@@ -749,7 +749,7 @@ namespace VidMePortable
         /// <returns></returns>
         public async Task<List<Application>> GetAuthorisedAppsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
 
             var response = await Post<AppsResponse>(postData, "oauth/apps", cancellationToken);
 
@@ -768,7 +768,7 @@ namespace VidMePortable
         /// <returns></returns>
         public async Task<List<Application>> GetOwnedAppsAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
 
             var response = await Post<AppsResponse>(postData, "oauth/clients", cancellationToken);
 
@@ -810,7 +810,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("app.redirecturl", "You must provide a redirect url");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             postData.AddIfNotNull("name", app.Name);
             postData.AddIfNotNull("website", app.Website);
             postData.AddIfNotNull("description", app.Description);
@@ -836,7 +836,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("clientId", "A Client ID must be provided");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             postData.AddIfNotNull("client_id", clientId);
 
             var response = await Post<Response>(postData, "oauth/revoke", cancellationToken);
@@ -945,7 +945,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("userId", "User Id cannot be null or empty");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
 
             postData.AddIfNotNull("username", username);
             postData.AddIfNotNull("email", email);
@@ -978,7 +978,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("userId", "User ID cannot be null or empty");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
 
             var method = string.Format("user/{0}/follow", userId);
 
@@ -1001,7 +1001,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("userId", "User ID cannot be null or empty");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             var method = string.Format("user/{0}/follows-channels", userId);
 
             var response = await Post<ChannelsResponse>(postData, method, cancellationToken);
@@ -1028,7 +1028,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("userId", "User ID cannot be null or empty");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             var method = string.Format("user/{0}/avatar/remove", userId);
 
             var response = await Post<AuthResponse>(postData, method, cancellationToken);
@@ -1050,7 +1050,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("userId", "User ID cannot be null or empty");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             var method = string.Format("user/{0}/unfollow", userId);
 
             var response = await Post<Response>(postData, method, cancellationToken);
@@ -1099,7 +1099,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("userId", "User ID cannot be null or empty");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
 
             var method = string.Format("user/{0}/avatar/update", userId);
 
@@ -1116,7 +1116,7 @@ namespace VidMePortable
         /// <returns></returns>
         public async Task<List<UserTag>> SuggestedUsersAsync(string searchText = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var postData = CreatePostData(false);
+            var postData = await CreatePostData(false);
             postData.AddIfNotNull("text", searchText);
 
             var response = await Post<UserTagsResponse>(postData, "users/suggest", cancellationToken);
@@ -1145,7 +1145,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("userId", "User ID cannot be null or empty");
             }
 
-            var options = CreatePostData(false, false);
+            var options = await CreatePostData(false, false);
             options.AddIfNotNull("user", userId);
             options.AddIfNotNull("offset", offset);
             options.AddIfNotNull("limit", limit);
@@ -1167,7 +1167,7 @@ namespace VidMePortable
         /// <returns></returns>
         public async Task<VideosResponse> GetAnonymousVideosAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var options = CreatePostData(false);
+            var options = await CreatePostData(false);
             options.AddIfNotNull("user", "0");
             options.AddIfNotNull("offset", offset);
             options.AddIfNotNull("limit", limit);
@@ -1188,7 +1188,7 @@ namespace VidMePortable
         /// <returns></returns>
         public async Task<VideosResponse> GetUserFeedAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             postData.AddIfNotNull("offset", offset);
             postData.AddIfNotNull("limit", limit);
 
@@ -1214,7 +1214,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
             }
 
-            var postData = CreatePostData(true);
+            var postData = await CreatePostData(true);
 
             var method = string.Format("video/{0}/delete", videoId);
             var response = await Post<Response>(postData, method, cancellationToken);
@@ -1251,7 +1251,7 @@ namespace VidMePortable
                 throw new InvalidOperationException("No Device ID was set");
             }
 
-            var postData = CreatePostData(false);
+            var postData = await CreatePostData(false);
             postData.AddIfNotNull("deleteToken", deletionToken);
 
             var method = string.Format("video/{0}/delete", videoId);
@@ -1273,7 +1273,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
             }
 
-            var options = CreatePostData(false);
+            var options = await CreatePostData(false);
             var method = string.Format("video/{0}", videoId);
 
             var response = await Get<VideoResponse>(method, options.ToQueryString(), cancellationToken);
@@ -1295,7 +1295,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
             }
 
-            var postData = CreatePostData(false);
+            var postData = await CreatePostData(false);
             if (request != null)
             {
                 postData.AddIfNotNull("title", request.Title);
@@ -1340,7 +1340,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("thumbnailStream", "Must provide a valid image");
             }
 
-            var postData = CreatePostData(false);
+            var postData = await CreatePostData(false);
             var method = string.Format("video/{0}/edit", videoId);
 
             using (var memoryStream = new MemoryStream())
@@ -1366,7 +1366,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             postData.Add("flagged", isFlagged ? "1" : "0");
 
             var method = string.Format("video/{0}/flag", videoId);
@@ -1383,7 +1383,7 @@ namespace VidMePortable
         /// <returns></returns>
         public async Task<VideoRequestResponse> RequestVideoAsync(VideoRequest request, CancellationToken cancellationToken = default(CancellationToken))
         {
-            var postData = CreatePostData(false);
+            var postData = await CreatePostData(false);
             if (request != null)
             {
                 postData.AddIfNotNull("title", request.Title);
@@ -1441,7 +1441,7 @@ namespace VidMePortable
                 throw new InvalidOperationException("You must have set a device id");
             }
 
-            var postData = CreatePostData();
+            var postData = await CreatePostData();
             postData.AddIfNotNull("code", videoCode);
             postData.AddIfNotNull("title", title);
 
@@ -1475,7 +1475,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("videoStream", "Invalid video stream passed through");
             }
 
-            var postData = CreatePostData(false);
+            var postData = await CreatePostData(false);
             postData.AddIfNotNull("code", videoCode);
 
             using (var m = await videoStream.ToMemoryStream())
@@ -1502,7 +1502,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("videoStream", "Invalid video stream passed through");
             }
 
-            var postData = CreatePostData(false);
+            var postData = await CreatePostData(false);
             if (request != null)
             {
                 postData.AddIfNotNull("channel", request.ChannelId);
@@ -1550,7 +1550,7 @@ namespace VidMePortable
                 throw new InvalidOperationException("You must supply either long/lat or a geofence ID");
             }
 
-            var postData = CreatePostData(false);
+            var postData = await CreatePostData(false);
             if (string.IsNullOrEmpty(request.GeofenceId))
             {
                 postData.AddIfNotNull("latitude", request.Latitude);
@@ -1586,12 +1586,14 @@ namespace VidMePortable
                 throw new ArgumentNullException("searchText", "Search text cannot be null or empty");
             }
 
-            var postData = CreatePostData(false);
+            var postData = await CreatePostData(false);
             postData.AddIfNotNull("query", searchText);
 
             var response = await Get<VideosResponse>("videos/search", postData.ToQueryString(), cancellationToken);
             return response;
         }
+
+        public event EventHandler<AuthResponse> AuthDetailsUpdated;
 
         #endregion
 
@@ -1649,12 +1651,27 @@ namespace VidMePortable
         }
         #endregion
 
-        private void CheckExpirationDateIsOk()
+        private async Task CheckExpirationDateIsOk()
         {
             var now = DateTime.Now;
-            if (AuthenticationInfo == null || AuthenticationInfo.Expires < now)
+            if (AuthenticationInfo == null)
             {
                 throw new VidMeException(HttpStatusCode.Unauthorized, new ErrorResponse { Error = "No valid AuthenticationInfo set" });
+            }
+
+            if (AuthenticationInfo.Expires < now)
+            {
+                var response = await CheckAuthTokenAsync();
+                if (response != null)
+                {
+                    SetAuthentication(response.Auth);
+
+                    var authChanged = AuthDetailsUpdated;
+                    if (authChanged != null)
+                    {
+                        authChanged(this, response);
+                    }
+                }
             }
         }
 
@@ -1663,12 +1680,12 @@ namespace VidMePortable
             return string.Format("{0}{1}?{2}", BaseUrl, method, options);
         }
 
-        private Dictionary<string, string> CreatePostData(bool tokenRequred = true, bool includeDevice = true)
+        private async Task<Dictionary<string, string>> CreatePostData(bool tokenRequred = true, bool includeDevice = true)
         {
             var postData = new Dictionary<string, string>();
             if (tokenRequred)
             {
-                CheckExpirationDateIsOk();
+                await CheckExpirationDateIsOk();
             }
 
             if (AuthenticationInfo != null)
