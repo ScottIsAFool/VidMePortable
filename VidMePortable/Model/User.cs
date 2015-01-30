@@ -42,7 +42,7 @@ namespace VidMePortable.Model
         public string VideoViews { get; set; }
 
         [JsonProperty("videos_scores")]
-        public int VideosScores { get; set; }
+        public float VideosScores { get; set; }
 
         [JsonProperty("bio")]
         public string Bio { get; set; }
