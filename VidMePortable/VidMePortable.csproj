@@ -69,6 +69,7 @@
     <Compile Include="Model\Notification.cs" />
     <Compile Include="Model\LocationOrderBy.cs" />
     <Compile Include="Model\Requests\LocationRequest.cs" />
+    <Compile Include="Model\Responses\IsFollowingResponse.cs" />
     <Compile Include="Model\Responses\NotificationsResponse.cs" />
     <Compile Include="Model\Responses\Response.cs" />
     <Compile Include="Model\Auth.cs" />

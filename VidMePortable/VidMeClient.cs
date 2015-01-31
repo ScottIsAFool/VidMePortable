@@ -253,6 +253,28 @@ namespace VidMePortable
         #region Channel Methods
 
         /// <summary>
+        /// Determines whether [is user following channel] [the specified channel identifier].
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="otherUser">The other user.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">channelId;A base channel ID must be provided</exception>
+        public async Task<bool> IsUserFollowingChannelAsync(string channelId, string otherUser = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(channelId))
+            {
+                throw new ArgumentNullException("channelId", "A base channel ID must be provided");
+            }
+
+            var options = await CreatePostData(false);
+            var method = string.Format("channel/{0}/follow/{1}", channelId, otherUser);
+
+            var response = await Get<IsFollowingResponse>(method, options.ToQueryString(), cancellationToken);
+            return response != null && response.IsFollowing;
+        }
+
+        /// <summary>
         /// Gets the channel.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
@@ -1287,6 +1309,28 @@ namespace VidMePortable
 
             var response = await Post<VideosResponse>(postData, "videos/feed", cancellationToken);
             return response;
+        }
+
+        /// <summary>
+        /// Determines whether [is user following user] [the specified user identifier].
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="otherUser">The other user.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;A base user ID must be provided</exception>
+        public async Task<bool> IsUserFollowingUserAsync(string userId, string otherUser = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "A base user ID must be provided");
+            }
+
+            var options = await CreatePostData(false);
+            var method = string.Format("user/{0}/follow/{1}", userId, otherUser);
+
+            var response = await Get<IsFollowingResponse>(method, options.ToQueryString(), cancellationToken);
+            return response != null && response.IsFollowing;
         }
 
         #endregion

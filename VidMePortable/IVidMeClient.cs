@@ -113,6 +113,16 @@ namespace VidMePortable
         void SetAuthentication(Auth authenticationInfo);
 
         /// <summary>
+        /// Determines whether [is user following channel] [the specified channel identifier].
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="otherUser">The other user.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">channelId;A base channel ID must be provided</exception>
+        Task<bool> IsUserFollowingChannelAsync(string channelId, string otherUser = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Gets the channel.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
@@ -535,6 +545,16 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         Task<VideosResponse> GetUserFeedAsync(int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Determines whether [is user following user] [the specified user identifier].
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="otherUser">The other user.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;A base user ID must be provided</exception>
+        Task<bool> IsUserFollowingUserAsync(string userId, string otherUser = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Deletes the video.
