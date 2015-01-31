@@ -361,6 +361,47 @@ namespace VidMePortable
         string GetUserAvatar(string userId);
 
         /// <summary>
+        /// Gets the user cover.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
+        string GetUserCover(string userId);
+
+        /// <summary>
+        /// Removes the cover.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;A user ID must be provided</exception>
+        Task<bool> RemoveCoverAsync(string userId, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Updates the cover asynchronous.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="imageStream">The image stream.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <param name="filename">The filename.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
+        Task<User> UpdateCoverAsync(string userId, Stream imageStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Updates the cover asynchronous.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="imageStream">The image stream.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <param name="filename">The filename.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
+        Task<User> UpdateCoverAsync(string userId, byte[] imageStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Creates the user.
         /// </summary>
         /// <param name="username">The username.</param>
@@ -642,9 +683,6 @@ namespace VidMePortable
         /// <exception cref="System.ArgumentNullException">searchText;Search text cannot be null or empty</exception>
         Task<VideosResponse> SearchVideosAsync(string searchText, CancellationToken cancellationToken = default(CancellationToken));
 
-        /// <summary>
-        /// Occurs when [authentication details updated].
-        /// </summary>
         event EventHandler<AuthResponse> AuthDetailsUpdated;
     }
 }

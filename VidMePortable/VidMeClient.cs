@@ -869,6 +869,97 @@ namespace VidMePortable
         }
 
         /// <summary>
+        /// Gets the user cover.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
+        public string GetUserCover(string userId)
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "User ID cannot be null or empty");
+            }
+
+            var method = string.Format("user/{0}/cover", userId);
+
+            return CreateUrl(method);
+        }
+
+        /// <summary>
+        /// Removes the cover.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;A user ID must be provided</exception>
+        public async Task<bool> RemoveCoverAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "A user ID must be provided");
+            }
+
+            var postData = await CreatePostData();
+            postData.AddIfNotNull("user", userId);
+
+            var method = string.Format("user/{0}/cover/remove", userId);
+
+            var response = await Post<Response>(postData, method, cancellationToken);
+            return response != null && response.Status;
+        }
+
+        /// <summary>
+        /// Updates the cover asynchronous.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="imageStream">The image stream.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <param name="filename">The filename.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
+        public async Task<User> UpdateCoverAsync(string userId, Stream imageStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "User ID cannot be null or empty");
+            }
+
+            using (var memoryStream = new MemoryStream())
+            {
+                await imageStream.CopyToAsync(memoryStream);
+                return await UpdateAvatarAsync(userId, memoryStream.ToArray(), contentType, filename, cancellationToken);
+            }
+        }
+
+        /// <summary>
+        /// Updates the cover asynchronous.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="imageStream">The image stream.</param>
+        /// <param name="contentType">Type of the content.</param>
+        /// <param name="filename">The filename.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
+        public async Task<User> UpdateCoverAsync(string userId, byte[] imageStream, string contentType, string filename, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "User ID cannot be null or empty");
+            }
+
+            var postData = await CreatePostData();
+
+            var method = string.Format("user/{0}/cover/update", userId);
+
+            var response = await PostFile<UserResponse>(postData, method, imageStream, contentType, filename, cancellationToken);
+
+            return response != null ? response.User : null;
+        }
+
+        /// <summary>
         /// Creates the user.
         /// </summary>
         /// <param name="username">The username.</param>
