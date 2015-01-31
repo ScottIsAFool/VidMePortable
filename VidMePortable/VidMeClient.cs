@@ -541,13 +541,13 @@ namespace VidMePortable
                 throw new ArgumentNullException("videoId", "Video ID cannot be null or empty");
             }
 
-            var options = new Dictionary<string, string>();
+            var options = await CreatePostData(false);
             options.AddIfNotNull("video", videoId);
             options.AddIfNotNull("direction", sortDirection);
             options.AddIfNotNull("offset", offset);
             options.AddIfNotNull("limit", limit);
 
-            var response = await Get<CommentsResponse>("comments/list", options.ToQueryString(), cancellationToken);
+            var response = await Post<CommentsResponse>(options, "comments/list", cancellationToken);
             return response;
         }
 
