@@ -60,10 +60,11 @@ namespace VidMePortable
         /// <summary>
         /// Checks the authentication token.
         /// </summary>
+        /// <param name="token"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="VidMeException">No AuthenticationInfo set</exception>
-        Task<AuthResponse> CheckAuthTokenAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<AuthResponse> CheckAuthTokenAsync(string token, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Deletes the authentication token.

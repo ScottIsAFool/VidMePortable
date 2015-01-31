@@ -101,7 +101,9 @@ namespace VidMePortable
             var postData = new Dictionary<string, string>
             {
                 {"username", username},
-                {"password", password}
+                {"password", password},
+                {"remember", "1"},
+                {"nocookie", "1"}
             };
 
             var response = await Post<AuthResponse>(postData, "auth/create", cancellationToken);
@@ -116,17 +118,18 @@ namespace VidMePortable
         /// <summary>
         /// Checks the authentication token.
         /// </summary>
+        /// <param name="token"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="VidMeException">No AuthenticationInfo set</exception>
-        public async Task<AuthResponse> CheckAuthTokenAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<AuthResponse> CheckAuthTokenAsync(string token, CancellationToken cancellationToken = default(CancellationToken))
         {
-            if (AuthenticationInfo == null)
+            if (string.IsNullOrEmpty(token))
             {
-                throw new VidMeException(HttpStatusCode.Unauthorized, new ErrorResponse { Error = "No AuthenticationInfo set" });
+                throw new ArgumentNullException("token", "You must provide a token");
             }
 
-            var postData = await CreatePostData();
+            var postData = new Dictionary<string, string> {{"token", token}};
             var response = await Post<AuthResponse>(postData, "auth/check", cancellationToken);
 
             if (response != null)
@@ -1149,7 +1152,6 @@ namespace VidMePortable
             options.AddIfNotNull("user", userId);
             options.AddIfNotNull("offset", offset);
             options.AddIfNotNull("limit", limit);
-            options.AddIfNotNull("moderated", "0");
             options.AddIfNotNull("state", "success");
             options.AddIfNotNull("minVideoId", "0");
             options.AddIfNotNull("direction", sortDirection);
@@ -1661,7 +1663,9 @@ namespace VidMePortable
 
             if (AuthenticationInfo.Expires < now)
             {
-                var response = await CheckAuthTokenAsync();
+                var token = AuthenticationInfo.Token;
+                AuthenticationInfo = null;
+                var response = await CheckAuthTokenAsync(token);
                 if (response != null)
                 {
                     SetAuthentication(response.Auth);
