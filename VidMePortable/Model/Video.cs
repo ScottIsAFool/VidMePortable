@@ -126,6 +126,9 @@ namespace VidMePortable.Model
         [JsonProperty("user")]
         public User User { get; set; }
 
+        [JsonProperty("channel")]
+        public Channel Channel { get; set; }
+
         [JsonProperty("formats")]
         public List<VideoFormat> VideoFormats { get; set; }
     }
