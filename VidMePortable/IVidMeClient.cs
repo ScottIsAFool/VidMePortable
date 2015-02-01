@@ -195,6 +195,16 @@ namespace VidMePortable
         Task<List<Channel>> ListSuggestedChannelsAsync(string text = null, int? number = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Gets the channel moderators.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<UsersResponse> GetChannelModeratorsAsync(string channelId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Creates the comment.
         /// </summary>
         /// <param name="videoId">The video identifier.</param>

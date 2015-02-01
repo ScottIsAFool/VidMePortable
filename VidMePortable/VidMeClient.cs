@@ -129,7 +129,7 @@ namespace VidMePortable
                 throw new ArgumentNullException("token", "You must provide a token");
             }
 
-            var postData = new Dictionary<string, string> {{"token", token}};
+            var postData = new Dictionary<string, string> { { "token", token } };
             var response = await Post<AuthResponse>(postData, "auth/check", cancellationToken);
 
             if (response != null)
@@ -435,6 +435,32 @@ namespace VidMePortable
             }
 
             return new List<Channel>();
+        }
+
+        /// <summary>
+        /// Gets the channel moderators.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">channelId;Channel ID cannot be null or empty</exception>
+        public async Task<UsersResponse> GetChannelModeratorsAsync(string channelId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(channelId))
+            {
+                throw new ArgumentNullException("channelId", "Channel ID cannot be null or empty");
+            }
+
+            var options = new Dictionary<string, string>();
+            options.AddIfNotNull("offset", offset);
+            options.AddIfNotNull("limit", limit);
+
+            var method = string.Format("channel/{0}/moderators", channelId);
+
+            var response = await Get<UsersResponse>(method, options.ToQueryString(), cancellationToken);
+            return response;
         }
 
         #endregion
