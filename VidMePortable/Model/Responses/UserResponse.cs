@@ -2,7 +2,7 @@
 
 namespace VidMePortable.Model.Responses
 {
-    public class UserResponse : Response
+    public class UserResponse : FollowResponse
     {
         [JsonProperty("user")]
         public User User { get; set; }

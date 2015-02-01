@@ -270,7 +270,7 @@ namespace VidMePortable
             var options = await CreatePostData(false);
             var method = string.Format("channel/{0}/follow/{1}", channelId, otherUser);
 
-            var response = await Get<IsFollowingResponse>(method, options.ToQueryString(), cancellationToken);
+            var response = await Get<FollowResponse>(method, options.ToQueryString(), cancellationToken);
             return response != null && response.IsFollowing;
         }
 
@@ -1355,7 +1355,7 @@ namespace VidMePortable
             var options = await CreatePostData(false);
             var method = string.Format("user/{0}/follow/{1}", userId, otherUser);
 
-            var response = await Get<IsFollowingResponse>(method, options.ToQueryString(), cancellationToken);
+            var response = await Get<FollowResponse>(method, options.ToQueryString(), cancellationToken);
             return response != null && response.IsFollowing;
         }
 
