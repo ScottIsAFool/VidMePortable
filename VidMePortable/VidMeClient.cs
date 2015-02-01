@@ -281,18 +281,18 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">channelId;Channel ID cannot be null or empty</exception>
-        public async Task<Channel> GetChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<ChannelResponse> GetChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(channelId))
             {
                 throw new ArgumentNullException("channelId", "Channel ID cannot be null or empty");
             }
 
+            var options = await CreatePostData(false);
             var method = string.Format("channel/{0}", channelId);
 
-            var response = await Get<ChannelResponse>(method, cancellationToken: cancellationToken);
-
-            return response != null ? response.Channel : null;
+            var response = await Get<ChannelResponse>(method, options.ToQueryString(), cancellationToken);
+            return response;
         }
 
         /// <summary>
@@ -1056,17 +1056,18 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User Id cannot be null or empty</exception>
-        public async Task<User> GetUserAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<UserResponse> GetUserAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
             {
                 throw new ArgumentNullException("userId", "User Id cannot be null or empty");
             }
 
+            var options = await CreatePostData(false);
             var method = string.Format("user/{0}", userId);
 
-            var response = await Post<UserResponse>(new Dictionary<string, string>(), method, cancellationToken);
-            return response != null ? response.User : null;
+            var response = await Post<UserResponse>(options, method, cancellationToken);
+            return response;
         }
 
         /// <summary>

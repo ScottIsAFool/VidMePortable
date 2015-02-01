@@ -129,7 +129,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">channelId;Channel ID cannot be null or empty</exception>
-        Task<Channel> GetChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken));
+        Task<ChannelResponse> GetChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Follows the channel.
@@ -443,7 +443,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User Id cannot be null or empty</exception>
-        Task<User> GetUserAsync(string userId, CancellationToken cancellationToken = default(CancellationToken));
+        Task<UserResponse> GetUserAsync(string userId, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Edits the user.
