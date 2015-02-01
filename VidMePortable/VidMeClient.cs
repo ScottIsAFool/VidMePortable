@@ -1756,7 +1756,18 @@ namespace VidMePortable
             postData.AddIfNotNull("query", searchText);
             postData.AddIfNotNull("offset", offset);
             postData.AddIfNotNull("limit", limit);
-            postData.AddIfNotNull("nsfw", includeNsfw);
+
+            if (includeNsfw.HasValue)
+            {
+                if (includeNsfw.Value)
+                {
+                    postData.AddIfNotNull("nsfw", "true");
+                }
+                else
+                {
+                    postData.Add("nsfw", string.Empty);
+                }
+            }
 
             var response = await Get<VideosResponse>("videos/search", postData.ToQueryString(), cancellationToken);
             return response;
