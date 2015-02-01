@@ -1713,10 +1713,13 @@ namespace VidMePortable
         /// Searches the videos.
         /// </summary>
         /// <param name="searchText">The search text.</param>
+        /// <param name="offset"></param>
+        /// <param name="limit"></param>
+        /// <param name="includeNsfw"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">searchText;Search text cannot be null or empty</exception>
-        public async Task<VideosResponse> SearchVideosAsync(string searchText, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<VideosResponse> SearchVideosAsync(string searchText, int? offset = null, int? limit = null, bool? includeNsfw = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(searchText))
             {
@@ -1725,6 +1728,9 @@ namespace VidMePortable
 
             var postData = await CreatePostData(false);
             postData.AddIfNotNull("query", searchText);
+            postData.AddIfNotNull("offset", offset);
+            postData.AddIfNotNull("limit", limit);
+            postData.AddIfNotNull("nsfw", includeNsfw);
 
             var response = await Get<VideosResponse>("videos/search", postData.ToQueryString(), cancellationToken);
             return response;

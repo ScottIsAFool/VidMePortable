@@ -698,10 +698,13 @@ namespace VidMePortable
         /// Searches the videos.
         /// </summary>
         /// <param name="searchText">The search text.</param>
+        /// <param name="offset"></param>
+        /// <param name="limit"></param>
+        /// <param name="includeNsfw"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">searchText;Search text cannot be null or empty</exception>
-        Task<VideosResponse> SearchVideosAsync(string searchText, CancellationToken cancellationToken = default(CancellationToken));
+        Task<VideosResponse> SearchVideosAsync(string searchText, int? offset = null, int? limit = null, bool? includeNsfw = null, CancellationToken cancellationToken = default(CancellationToken));
 
         event EventHandler<AuthResponse> AuthDetailsUpdated;
     }
