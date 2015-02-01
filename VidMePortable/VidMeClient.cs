@@ -85,7 +85,6 @@ namespace VidMePortable
         /// or
         /// password;password cannot be null or empty
         /// </exception>
-        [Obsolete("This method will work, but the oauth way is preferred")]
         public async Task<AuthResponse> AuthenticateAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(username))
