@@ -54,7 +54,6 @@ namespace VidMePortable
         /// or
         /// password;password cannot be null or empty
         /// </exception>
-        [Obsolete("This method will work, but the oauth way is preferred")]
         Task<AuthResponse> AuthenticateAsync(string username, string password, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
@@ -130,6 +129,13 @@ namespace VidMePortable
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">channelId;Channel ID cannot be null or empty</exception>
         Task<ChannelResponse> GetChannelAsync(string channelId, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Gets the channels.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<List<Channel>> GetChannelsAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Follows the channel.

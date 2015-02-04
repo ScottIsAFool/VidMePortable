@@ -295,6 +295,23 @@ namespace VidMePortable
         }
 
         /// <summary>
+        /// Gets the channels.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<List<Channel>> GetChannelsAsync(CancellationToken cancellationToken = new CancellationToken())
+        {
+            var response = await Get<ChannelsResponse>("channels/list", cancellationToken: cancellationToken);
+
+            if (response != null)
+            {
+                return response.Channels ?? new List<Channel>();
+            }
+
+            return new List<Channel>();
+        }
+
+        /// <summary>
         /// Follows the channel.
         /// </summary>
         /// <param name="channelId">The channel identifier.</param>
