@@ -993,7 +993,7 @@ namespace VidMePortable
             using (var memoryStream = new MemoryStream())
             {
                 await imageStream.CopyToAsync(memoryStream);
-                return await UpdateAvatarAsync(userId, memoryStream.ToArray(), contentType, filename, cancellationToken);
+                return await UpdateCoverAsync(userId, memoryStream.ToArray(), contentType, filename, cancellationToken);
             }
         }
 
