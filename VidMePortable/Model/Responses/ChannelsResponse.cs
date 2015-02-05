@@ -5,7 +5,7 @@ namespace VidMePortable.Model.Responses
 {
     public class ChannelsResponse : Response
     {
-        [JsonProperty("channels")]
+        [JsonProperty("data")]
         public List<Channel> Channels { get; set; }
     }
 }
