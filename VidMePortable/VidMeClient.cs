@@ -1098,7 +1098,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User Id cannot be null or empty</exception>
-        public async Task<AuthResponse> EditUserAsync(string userId, string username = null, string currentPassword = null, string newPassword = null, string email = null, string bio = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<User> EditUserAsync(string userId, string username = null, string currentPassword = null, string newPassword = null, string email = null, string bio = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
             {
@@ -1117,13 +1117,9 @@ namespace VidMePortable
 
             var method = string.Format("user/{0}/edit", userId);
 
-            var response = await Post<AuthResponse>(postData, method, cancellationToken);
-            if (response != null)
-            {
-                SetAuthentication(response.Auth);
-            }
-
-            return response;
+            var response = await Post<UserResponse>(postData, method, cancellationToken);
+            
+            return response != null ? response.User : null;
         }
 
         /// <summary>

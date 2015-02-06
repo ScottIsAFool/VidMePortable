@@ -463,7 +463,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User Id cannot be null or empty</exception>
-        Task<AuthResponse> EditUserAsync(string userId, string username = null, string currentPassword = null, string newPassword = null, string email = null, string bio = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<User> EditUserAsync(string userId, string username = null, string currentPassword = null, string newPassword = null, string email = null, string bio = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Follows the user.

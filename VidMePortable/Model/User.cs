@@ -46,5 +46,8 @@ namespace VidMePortable.Model
 
         [JsonProperty("bio")]
         public string Bio { get; set; }
+
+        [JsonProperty("email")]
+        public string Email { get; set; }
     }
 }
