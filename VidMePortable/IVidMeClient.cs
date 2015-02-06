@@ -459,10 +459,11 @@ namespace VidMePortable
         /// <param name="currentPassword">The current password.</param>
         /// <param name="newPassword">The new password.</param>
         /// <param name="email">The email.</param>
+        /// <param name="bio"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User Id cannot be null or empty</exception>
-        Task<AuthResponse> EditUserAsync(string userId, string username = null, string currentPassword = null, string newPassword = null, string email = null, CancellationToken cancellationToken = default(CancellationToken));
+        Task<AuthResponse> EditUserAsync(string userId, string username = null, string currentPassword = null, string newPassword = null, string email = null, string bio = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Follows the user.

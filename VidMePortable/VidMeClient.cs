@@ -1094,10 +1094,11 @@ namespace VidMePortable
         /// <param name="currentPassword">The current password.</param>
         /// <param name="newPassword">The new password.</param>
         /// <param name="email">The email.</param>
+        /// <param name="bio"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User Id cannot be null or empty</exception>
-        public async Task<AuthResponse> EditUserAsync(string userId, string username = null, string currentPassword = null, string newPassword = null, string email = null, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<AuthResponse> EditUserAsync(string userId, string username = null, string currentPassword = null, string newPassword = null, string email = null, string bio = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
             {
@@ -1110,11 +1111,13 @@ namespace VidMePortable
             postData.AddIfNotNull("email", email);
             postData.AddIfNotNull("password", newPassword);
             postData.AddIfNotNull("passwordCurrent", currentPassword);
-            postData.AddIfNotNull("bio", "");
+            postData.AddIfNotNull("bio", bio);
 
             postData.AddIfNotNull("email", email);
 
-            var response = await Post<AuthResponse>(postData, "user/edit", cancellationToken);
+            var method = string.Format("user/{0}/edit", userId);
+
+            var response = await Post<AuthResponse>(postData, method, cancellationToken);
             if (response != null)
             {
                 SetAuthentication(response.Auth);
