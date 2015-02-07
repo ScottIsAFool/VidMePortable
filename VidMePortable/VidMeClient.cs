@@ -957,7 +957,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;A user ID must be provided</exception>
-        public async Task<bool> RemoveCoverAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<User> RemoveCoverAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
             {
@@ -969,8 +969,8 @@ namespace VidMePortable
 
             var method = string.Format("user/{0}/cover/remove", userId);
 
-            var response = await Post<Response>(postData, method, cancellationToken);
-            return response != null && response.Status;
+            var response = await Post<UserResponse>(postData, method, cancellationToken);
+            return response != null ? response.User : null;
         }
 
         /// <summary>
@@ -1179,7 +1179,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
-        public async Task<bool> RemoveAvatarAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<User> RemoveAvatarAsync(string userId, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
             {
@@ -1189,9 +1189,9 @@ namespace VidMePortable
             var postData = await CreatePostData();
             var method = string.Format("user/{0}/avatar/remove", userId);
 
-            var response = await Post<AuthResponse>(postData, method, cancellationToken);
+            var response = await Post<UserResponse>(postData, method, cancellationToken);
 
-            return response != null && response.Status;
+            return response != null ? response.User : null;
         }
 
         /// <summary>

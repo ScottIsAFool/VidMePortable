@@ -401,7 +401,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;A user ID must be provided</exception>
-        Task<bool> RemoveCoverAsync(string userId, CancellationToken cancellationToken = default(CancellationToken));
+        Task<User> RemoveCoverAsync(string userId, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Updates the cover asynchronous.
@@ -490,7 +490,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">userId;User ID cannot be null or empty</exception>
-        Task<bool> RemoveAvatarAsync(string userId, CancellationToken cancellationToken = default(CancellationToken));
+        Task<User> RemoveAvatarAsync(string userId, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Unfollows the user.
