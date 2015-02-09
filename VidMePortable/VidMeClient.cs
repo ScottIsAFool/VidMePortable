@@ -1375,6 +1375,16 @@ namespace VidMePortable
             return response != null && response.IsFollowing;
         }
 
+        public async Task<UsersResponse> GetUsersFollowersAsync(string userId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "You must provide a valid user id");
+            }
+
+            var postData = await CreatePostData();
+        }
+
         #endregion
 
         #region Video Methods
