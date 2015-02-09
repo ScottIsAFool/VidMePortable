@@ -1375,6 +1375,15 @@ namespace VidMePortable
             return response != null && response.IsFollowing;
         }
 
+        /// <summary>
+        /// Gets the users followers.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;You must provide a valid user id</exception>
         public async Task<UsersResponse> GetUsersFollowersAsync(string userId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(userId))
@@ -1383,6 +1392,39 @@ namespace VidMePortable
             }
 
             var postData = await CreatePostData();
+            postData.AddIfNotNull("offset", offset);
+            postData.AddIfNotNull("limit", limit);
+
+            var method = string.Format("user/{0}/followers", userId);
+
+            var response = await Post<UsersResponse>(postData, method, cancellationToken);
+            return response;
+        }
+
+        /// <summary>
+        /// Gets the users following.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">userId;You must provide a valid user id</exception>
+        public async Task<UsersResponse> GetUsersFollowingAsync(string userId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(userId))
+            {
+                throw new ArgumentNullException("userId", "You must provide a valid user id");
+            }
+
+            var postData = await CreatePostData();
+            postData.AddIfNotNull("offset", offset);
+            postData.AddIfNotNull("limit", limit);
+
+            var method = string.Format("user/{0}/following", userId);
+
+            var response = await Post<UsersResponse>(postData, method, cancellationToken);
+            return response;
         }
 
         #endregion

@@ -574,6 +574,26 @@ namespace VidMePortable
         Task<bool> IsUserFollowingUserAsync(string userId, string otherUser = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Gets the users followers.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<UsersResponse> GetUsersFollowersAsync(string userId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
+        /// Gets the users following asynchronous.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<UsersResponse> GetUsersFollowingAsync(string userId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Deletes the video.
         /// </summary>
         /// <param name="videoId">The video identifier.</param>
