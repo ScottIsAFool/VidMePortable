@@ -1391,13 +1391,13 @@ namespace VidMePortable
                 throw new ArgumentNullException("userId", "You must provide a valid user id");
             }
 
-            var postData = await CreatePostData();
+            var postData = await CreatePostData(false);
             postData.AddIfNotNull("offset", offset);
             postData.AddIfNotNull("limit", limit);
 
             var method = string.Format("user/{0}/followers", userId);
 
-            var response = await Post<UsersResponse>(postData, method, cancellationToken);
+            var response = await Get<UsersResponse>(method, postData.ToQueryString(), cancellationToken);
             return response;
         }
 
@@ -1417,13 +1417,13 @@ namespace VidMePortable
                 throw new ArgumentNullException("userId", "You must provide a valid user id");
             }
 
-            var postData = await CreatePostData();
+            var postData = await CreatePostData(false);
             postData.AddIfNotNull("offset", offset);
             postData.AddIfNotNull("limit", limit);
 
             var method = string.Format("user/{0}/following", userId);
 
-            var response = await Post<UsersResponse>(postData, method, cancellationToken);
+            var response = await Get<UsersResponse>(method, postData.ToQueryString(), cancellationToken);
             return response;
         }
 
