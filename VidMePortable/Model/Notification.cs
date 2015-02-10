@@ -22,6 +22,9 @@ namespace VidMePortable.Model
         [JsonProperty("data")]
         public Data Data { get; set; }
 
+        [JsonProperty("actor")]
+        public User User { get; set; }
+
         [JsonProperty("read")]
         public bool Read { get; set; }
 
