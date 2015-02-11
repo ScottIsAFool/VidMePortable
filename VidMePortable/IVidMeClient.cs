@@ -312,9 +312,11 @@ namespace VidMePortable
         /// <summary>
         /// Gets the notifications.
         /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="offset"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<List<Notification>> GetNotificationsAsync(CancellationToken cancellationToken = default(CancellationToken));
+        Task<NotificationsResponse> GetNotificationsAsync(int? limit = null, int? offset = null, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Marks the notifications as read.

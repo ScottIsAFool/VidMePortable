@@ -731,19 +731,18 @@ namespace VidMePortable
         /// <summary>
         /// Gets the notifications.
         /// </summary>
+        /// <param name="limit"></param>
+        /// <param name="offset"></param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public async Task<List<Notification>> GetNotificationsAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<NotificationsResponse> GetNotificationsAsync(int? limit = null, int? offset = null, CancellationToken cancellationToken = default(CancellationToken))
         {
             var postData = await CreatePostData();
+            postData.AddIfNotNull("limit", limit);
+            postData.AddIfNotNull("offset", offset);
 
             var response = await Post<NotificationsResponse>(postData, "notifications", cancellationToken);
-            if (response != null)
-            {
-                return response.Notifications ?? new List<Notification>();
-            }
-
-            return new List<Notification>();
+            return response;
         }
 
         /// <summary>
@@ -1888,7 +1887,7 @@ namespace VidMePortable
         {
             var responseString = await response.Content.ReadAsStringAsync();
 
-            if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode || responseString.Contains("\"status\":true"))
             {
                 var returnItem = JsonConvert.DeserializeObject<TReturnType>(responseString);
                 return returnItem;

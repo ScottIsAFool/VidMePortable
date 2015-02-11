@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Attributes\DescriptionAttribute.cs" />
     <Compile Include="Converters\DateTimeConverter.cs" />
+    <Compile Include="Converters\EnumConverter.cs" />
     <Compile Include="Converters\ListConverters.cs" />
     <Compile Include="Extensions\AttributeExtensions.cs" />
     <Compile Include="Extensions\DictionaryExtensions.cs" />

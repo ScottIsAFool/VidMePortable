@@ -4,22 +4,39 @@ namespace VidMePortable.Model
 {
     public enum NotificationType
     {
-        // channel-subscribed - When someone subscribes to a channel of which you are a moderator.
+        /// <summary>
+        /// channel-subscribed - When someone subscribes to a channel of which you are a moderator.
+        /// </summary>
         [Description("channel-subscribed")]
         ChannelSubscribed,
-        // comment-replied-to - When someone replied to your comment (currently disabled)
+        
+        /// <summary>
+        /// comment-replied-to - When someone replied to your comment (currently disabled)
+        /// </summary>
         [Description("comment-replied-to")]
         CommentReply,
-        // user-subscribed - When someone follows you
+        
+        /// <summary>
+        ///user-subscribed - When someone follows you
+        /// </summary>
         [Description("user-subscribed")]
         UserSubscribed,
-        // user-welcome - After you sign up
+        
+        /// <summary>
+        /// user-welcome - After you sign up
+        /// </summary>
         [Description("user-welcome")]
         UserWelcome,
-        // video-commented - When someone comments on your video
+        
+        /// <summary>
+        /// video-commented - When someone comments on your video
+        /// </summary>
         [Description("video-commented")]
         VideoComment,
-        // video-upvoted - When someone likes (up votes) your video
+        
+        /// <summary>
+        /// video-upvoted - When someone likes (up votes) your video
+        /// </summary>
         [Description("video-upvoted")]
         VideoUpVoted
     }
