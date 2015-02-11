@@ -17,7 +17,8 @@ namespace VidMePortable.Model
         public string UserId { get; set; }
 
         [JsonProperty("type")]
-        public string Type { get; set; }
+        [JsonConverter(typeof(EnumConverter<NotificationType>))]
+        public NotificationType Type { get; set; }
 
         [JsonProperty("data")]
         public Data Data { get; set; }
