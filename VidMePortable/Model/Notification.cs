@@ -18,13 +18,22 @@ namespace VidMePortable.Model
 
         [JsonProperty("type")]
         [JsonConverter(typeof(EnumConverter<NotificationType>))]
-        public NotificationType Type { get; set; }
+        public NotificationType NotificationType { get; set; }
 
         [JsonProperty("data")]
         public Data Data { get; set; }
 
         [JsonProperty("actor")]
         public User User { get; set; }
+
+        [JsonProperty("video")]
+        public Video Video { get; set; }
+
+        [JsonProperty("comment")]
+        public Comment Comment { get; set; }
+
+        [JsonProperty("channel")]
+        public Channel Channel { get; set; }
 
         [JsonProperty("read")]
         public bool Read { get; set; }
