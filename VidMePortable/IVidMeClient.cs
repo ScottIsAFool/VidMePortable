@@ -723,6 +723,15 @@ namespace VidMePortable
         Task<VideoUploadResponse> UploadVideoAsync(VideoRequest request, Stream videoStream, string contentType, string fileName, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Votes for video.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="vote">The vote.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<ViewerVote> VoteForVideoAsync(string videoId, Vote vote, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Locations the search.
         /// </summary>
         /// <param name="request">The request.</param>

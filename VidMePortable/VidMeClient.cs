@@ -1755,6 +1755,30 @@ namespace VidMePortable
             }
         }
 
+        /// <summary>
+        /// Votes for video.
+        /// </summary>
+        /// <param name="videoId">The video identifier.</param>
+        /// <param name="vote">The vote.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">videoId;You must provide a video id</exception>
+        public async Task<ViewerVote> VoteForVideoAsync(string videoId, Vote vote, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(videoId))
+            {
+                throw new ArgumentNullException("videoId", "You must provide a video id");
+            }
+
+            var postData = await CreatePostData();
+            postData.AddIfNotNull("value", vote.GetDescription());
+
+            var method = string.Format("video/{0}/vote", videoId);
+
+            var response = await Post<VideoResponse>(postData, method, cancellationToken);
+            return response != null ? response.ViewerVote : null;
+        }
+
         #endregion
 
         #region Search Methods
