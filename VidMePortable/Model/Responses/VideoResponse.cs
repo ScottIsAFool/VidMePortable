@@ -31,5 +31,11 @@ namespace VidMePortable.Model.Responses
 
         [JsonProperty("watchers")]
         public Watchers Watchers { get; set; }
+
+        [JsonProperty("viewerVote")]
+        public ViewerVote ViewerVote { get; set; }
+
+        [JsonProperty("isFeatured")]
+        public bool IsFeatured { get; set; }
     }
 }
