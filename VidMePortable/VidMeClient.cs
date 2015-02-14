@@ -479,6 +479,32 @@ namespace VidMePortable
             return response;
         }
 
+        /// <summary>
+        /// Gets the channel followers.
+        /// </summary>
+        /// <param name="channelId">The channel identifier.</param>
+        /// <param name="offset">The offset.</param>
+        /// <param name="limit">The limit.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">channelId;You must provide a valid channel id</exception>
+        public async Task<UsersResponse> GetChannelFollowersAsync(string channelId, int? offset = null, int? limit = null, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(channelId))
+            {
+                throw new ArgumentNullException("channelId", "You must provide a valid channel id");
+            }
+
+            var options = await CreatePostData(false);
+            options.AddIfNotNull("offset", offset);
+            options.AddIfNotNull("limit", limit);
+
+            var method = string.Format("channel/{0}/followers", channelId);
+
+            var response = await Get<UsersResponse>(method, options.ToQueryString(), cancellationToken);
+            return response;
+        }
+
         #endregion
 
         #region Comment Methods
