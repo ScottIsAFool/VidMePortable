@@ -18,5 +18,13 @@ namespace VidMePortable.Model.Requests
         public string ChannelId { get; set; }
         public float? VideoSize { get; set; }
         public string FileName { get; set; }
+        /// <summary>
+        /// Gets or sets if the video is NSFW.
+        /// NOTE: Will only allow you to say video is NSFW, can't change a video from NSFW -> SFW
+        /// </summary>
+        /// <value>
+        /// The is NSFW.
+        /// </value>
+        public bool? IsNsfw { get; set; }
     }
 }

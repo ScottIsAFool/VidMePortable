@@ -38,11 +38,18 @@ namespace VidMePortable.Extensions
             }
         }
 
-        internal static void AddIfNotNull(this Dictionary<string, string> postData, string key, bool? item)
+        internal static void AddIfNotNull(this Dictionary<string, string> postData, string key, bool? item, bool isBinary = false)
         {
             if (item.HasValue)
             {
-                postData.Add(key, item.Value.ToString());
+                if (isBinary)
+                {
+                    postData.Add(key, item.Value ? "1" : "0");
+                }
+                else
+                {
+                    postData.Add(key, item.Value.ToString());
+                }
             }
         }
 

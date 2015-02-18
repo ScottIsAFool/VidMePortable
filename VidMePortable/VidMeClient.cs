@@ -1561,7 +1561,8 @@ namespace VidMePortable
                 postData.AddIfNotNull("longitude", request.Longitude);
                 postData.AddIfNotNull("place_id", request.FourSquarePlaceId);
                 postData.AddIfNotNull("place_name", request.FourSquarePlaceName);
-                postData.AddIfNotNull("private", request.IsPrivate);
+                postData.AddIfNotNull("private", request.IsPrivate, true);
+                postData.AddIfNotNull("nsfw", request.IsNsfw, true);
             }
 
             var method = string.Format("video/{0}/edit", videoId);
@@ -1650,7 +1651,8 @@ namespace VidMePortable
                 postData.AddIfNotNull("longitude", request.Longitude);
                 postData.AddIfNotNull("place_id", request.FourSquarePlaceId);
                 postData.AddIfNotNull("place_name", request.FourSquarePlaceName);
-                postData.AddIfNotNull("private", request.IsPrivate);
+                postData.AddIfNotNull("private", request.IsPrivate, true);
+                postData.AddIfNotNull("nsfw", request.IsNsfw, true);
             }
 
             var response = await Post<VideoRequestResponse>(postData, "video/request", cancellationToken);
@@ -1770,7 +1772,8 @@ namespace VidMePortable
                 postData.AddIfNotNull("longitude", request.Longitude);
                 postData.AddIfNotNull("place_id", request.FourSquarePlaceId);
                 postData.AddIfNotNull("place_name", request.FourSquarePlaceName);
-                postData.AddIfNotNull("private", request.IsPrivate);
+                postData.AddIfNotNull("private", request.IsPrivate, true);
+                postData.AddIfNotNull("nsfw", request.IsNsfw, true);
                 postData.AddIfNotNull("filename", request.FileName);
             }
 
