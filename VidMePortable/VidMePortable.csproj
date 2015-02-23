@@ -80,6 +80,7 @@
     <Compile Include="Model\Responses\ChannelsResponse.cs" />
     <Compile Include="Model\Responses\ErrorResponse.cs" />
     <Compile Include="Model\Requests\VideoRequest.cs" />
+    <Compile Include="Model\Responses\UnreadNotificationResponse.cs" />
     <Compile Include="Model\Responses\UsersResponse.cs" />
     <Compile Include="Model\VideoFormat.cs" />
     <Compile Include="Model\Responses\VideoRequestResponse.cs" />

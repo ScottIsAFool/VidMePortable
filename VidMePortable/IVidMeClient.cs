@@ -345,6 +345,13 @@ namespace VidMePortable
         Task<bool> MarkAllNotificationsAsReadAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Gets the unread notification count.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<int> GetUnreadNotificationCountAsync(CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Suggesteds the tags.
         /// </summary>
         /// <param name="searchText">The search text.</param>

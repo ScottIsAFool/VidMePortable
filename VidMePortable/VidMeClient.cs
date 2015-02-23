@@ -806,6 +806,28 @@ namespace VidMePortable
             return response != null && response.Status;
         }
 
+        /// <summary>
+        /// Gets the unread notification count.
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<int> GetUnreadNotificationCountAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var postData = await CreatePostData();
+
+            var response = await Post<UnreadNotificationResponse>(postData, "notifications/unread", cancellationToken);
+            if (response != null)
+            {
+                int unread;
+                if (int.TryParse(response.UnreadCount, out unread))
+                {
+                    return unread;
+                }
+            }
+
+            return 0;
+        }
+
         #endregion
 
         #region Tags Methods
