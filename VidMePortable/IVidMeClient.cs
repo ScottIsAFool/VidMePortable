@@ -352,6 +352,25 @@ namespace VidMePortable
         Task<int> GetUnreadNotificationCountAsync(CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Subscribes to notifications.
+        /// </summary>
+        /// <param name="subscriptionType">Type of the subscription.</param>
+        /// <param name="subscriptionAddress">The subscription address.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<string> SubscribeToNotificationsAsync(SubscriptionType subscriptionType, string subscriptionAddress, CancellationToken cancellationToken = default (CancellationToken));
+
+        /// <summary>
+        /// Unsubscribes to notifications.
+        /// </summary>
+        /// <param name="subscriptionType">Type of the subscription.</param>
+        /// <param name="subscriptionAddress">The subscription address.</param>
+        /// <param name="subscriptionId">The subscription identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<bool> UnsubscribeToNotificationsAsync(SubscriptionType? subscriptionType, string subscriptionAddress, string subscriptionId, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Suggesteds the tags.
         /// </summary>
         /// <param name="searchText">The search text.</param>

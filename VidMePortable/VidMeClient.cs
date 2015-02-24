@@ -828,6 +828,48 @@ namespace VidMePortable
             return 0;
         }
 
+        /// <summary>
+        /// Subscribes to notifications.
+        /// </summary>
+        /// <param name="subscriptionType">Type of the subscription.</param>
+        /// <param name="subscriptionAddress">The subscription address.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">subscriptionAddress;You must provide a subscription address</exception>
+        public async Task<string> SubscribeToNotificationsAsync(SubscriptionType subscriptionType, string subscriptionAddress, CancellationToken cancellationToken = default (CancellationToken))
+        {
+            if (string.IsNullOrEmpty(subscriptionAddress))
+            {
+                throw new ArgumentNullException("subscriptionAddress", "You must provide a subscription address");
+            }
+
+            var postData = await CreatePostData();
+            postData.AddIfNotNull("notify_type", subscriptionType.GetDescription());
+            postData.AddIfNotNull("notify_address", subscriptionAddress);
+
+            var response = await Post<SubscriptionResponse>(postData, "notifications/subscribe", cancellationToken);
+            return response != null ? response.SubscriptionId : string.Empty;
+        }
+
+        /// <summary>
+        /// Unsubscribes to notifications.
+        /// </summary>
+        /// <param name="subscriptionType">Type of the subscription.</param>
+        /// <param name="subscriptionAddress">The subscription address.</param>
+        /// <param name="subscriptionId">The subscription identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        public async Task<bool> UnsubscribeToNotificationsAsync(SubscriptionType? subscriptionType, string subscriptionAddress, string subscriptionId, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var postData = await CreatePostData();
+            postData.AddIfNotNull("notify_type", subscriptionType);
+            postData.AddIfNotNull("notify_address", subscriptionAddress);
+            postData.AddIfNotNull("subscription_id", subscriptionId);
+
+            var response = await Post<Response>(postData, "notifications/unsubscribe", cancellationToken);
+            return response != null && response.Status;
+        }
+
         #endregion
 
         #region Tags Methods
