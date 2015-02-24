@@ -389,6 +389,15 @@ namespace VidMePortable
         Task<CreateAppResponse> RegisterAppAsync(AppRequest app, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
+        /// Edits the application.
+        /// </summary>
+        /// <param name="appId">The application identifier.</param>
+        /// <param name="app">The application.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        Task<bool> EditAppAsync(string appId, AppRequest app, CancellationToken cancellationToken = default(CancellationToken));
+
+        /// <summary>
         /// Revokes the application token.
         /// </summary>
         /// <param name="clientId">The client identifier.</param>

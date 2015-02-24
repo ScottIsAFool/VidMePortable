@@ -937,6 +937,58 @@ namespace VidMePortable
         }
 
         /// <summary>
+        /// Edits the application.
+        /// </summary>
+        /// <param name="appId">The application identifier.</param>
+        /// <param name="app">The application.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns></returns>
+        /// <exception cref="System.ArgumentNullException">
+        /// appId;You must provide an App ID
+        /// or
+        /// app;You must provide some app details
+        /// or
+        /// app.name;You must provide a name for the app
+        /// or
+        /// app.redirecturl;You must provide a redirect url
+        /// </exception>
+        public async Task<bool> EditAppAsync(string appId, AppRequest app, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            if (string.IsNullOrEmpty(appId))
+            {
+                throw new ArgumentNullException("appId", "You must provide an App ID");
+            }
+
+            if (app == null)
+            {
+                throw new ArgumentNullException("app", "You must provide some app details");
+            }
+
+            if (string.IsNullOrEmpty(app.Name))
+            {
+                throw new ArgumentNullException("app.name", "You must provide a name for the app");
+            }
+
+            if (string.IsNullOrEmpty(app.RedirectUri))
+            {
+                throw new ArgumentNullException("app.redirecturl", "You must provide a redirect url");
+            }
+
+            var postData = await CreatePostData();
+            postData.AddIfNotNull("name", app.Name);
+            postData.AddIfNotNull("website", app.Website);
+            postData.AddIfNotNull("description", app.Description);
+            postData.AddIfNotNull("organization", app.Organisation);
+            postData.AddIfNotNull("accept_terms", "yes");
+            postData.AddIfNotNull("redirect_uri_prefix", app.RedirectUri);
+
+            var method = string.Format("oauth/client/{0}/edit", appId);
+
+            var response = await Post<Response>(postData, method, cancellationToken);
+            return response != null && response.Status;
+        }
+
+        /// <summary>
         /// Revokes the application token.
         /// </summary>
         /// <param name="clientId">The client identifier.</param>
