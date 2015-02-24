@@ -363,12 +363,10 @@ namespace VidMePortable
         /// <summary>
         /// Unsubscribes to notifications.
         /// </summary>
-        /// <param name="subscriptionType">Type of the subscription.</param>
-        /// <param name="subscriptionAddress">The subscription address.</param>
         /// <param name="subscriptionId">The subscription identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<bool> UnsubscribeToNotificationsAsync(SubscriptionType? subscriptionType, string subscriptionAddress, string subscriptionId, CancellationToken cancellationToken = default(CancellationToken));
+        Task<bool> UnsubscribeToNotificationsAsync(string subscriptionId, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Suggesteds the tags.

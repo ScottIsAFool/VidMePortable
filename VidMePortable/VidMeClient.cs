@@ -854,16 +854,17 @@ namespace VidMePortable
         /// <summary>
         /// Unsubscribes to notifications.
         /// </summary>
-        /// <param name="subscriptionType">Type of the subscription.</param>
-        /// <param name="subscriptionAddress">The subscription address.</param>
         /// <param name="subscriptionId">The subscription identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        public async Task<bool> UnsubscribeToNotificationsAsync(SubscriptionType? subscriptionType, string subscriptionAddress, string subscriptionId, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<bool> UnsubscribeToNotificationsAsync(string subscriptionId, CancellationToken cancellationToken = default(CancellationToken))
         {
+            if (string.IsNullOrEmpty(subscriptionId))
+            {
+                throw new ArgumentNullException("subscriptionId", "You must provide a valid subscription ID");
+            }
+
             var postData = await CreatePostData();
-            postData.AddIfNotNull("notify_type", subscriptionType);
-            postData.AddIfNotNull("notify_address", subscriptionAddress);
             postData.AddIfNotNull("subscription_id", subscriptionId);
 
             var response = await Post<Response>(postData, "notifications/unsubscribe", cancellationToken);
