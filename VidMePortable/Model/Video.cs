@@ -4,7 +4,6 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using PropertyChanged;
 using VidMePortable.Converters;
-using VidMePortable.Model.Responses;
 
 namespace VidMePortable.Model
 {

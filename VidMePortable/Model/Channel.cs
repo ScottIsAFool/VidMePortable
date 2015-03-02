@@ -52,5 +52,8 @@ namespace VidMePortable.Model
 
         [JsonProperty("video_count")]
         public int VideoCount { get; set; }
+        
+        [JsonProperty("colors")]
+        public string Colors { get; set; }
     }
 }

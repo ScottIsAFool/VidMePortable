@@ -1913,7 +1913,7 @@ namespace VidMePortable
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
         /// <exception cref="System.ArgumentNullException">videoId;You must provide a video id</exception>
-        public async Task<ViewerVote> VoteForVideoAsync(string videoId, Vote vote, CancellationToken cancellationToken = default(CancellationToken))
+        public async Task<VoteResponse> VoteForVideoAsync(string videoId, Vote vote, CancellationToken cancellationToken = default(CancellationToken))
         {
             if (string.IsNullOrEmpty(videoId))
             {
@@ -1925,8 +1925,8 @@ namespace VidMePortable
 
             var method = string.Format("video/{0}/vote", videoId);
 
-            var response = await Post<VideoResponse>(postData, method, cancellationToken);
-            return response != null ? response.ViewerVote : null;
+            var response = await Post<VoteResponse>(postData, method, cancellationToken);
+            return response;
         }
 
         #endregion

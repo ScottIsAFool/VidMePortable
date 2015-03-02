@@ -774,7 +774,7 @@ namespace VidMePortable
         /// <param name="vote">The vote.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns></returns>
-        Task<ViewerVote> VoteForVideoAsync(string videoId, Vote vote, CancellationToken cancellationToken = default(CancellationToken));
+        Task<VoteResponse> VoteForVideoAsync(string videoId, Vote vote, CancellationToken cancellationToken = default(CancellationToken));
 
         /// <summary>
         /// Locations the search.

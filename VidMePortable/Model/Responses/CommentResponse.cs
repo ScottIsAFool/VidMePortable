@@ -6,5 +6,8 @@ namespace VidMePortable.Model.Responses
     {
         [JsonProperty("comment")]
         public Comment Comment { get; set; }
+
+        [JsonProperty("vote")]
+        public ViewerVote ViewerVote { get; set; }
     }
 }
